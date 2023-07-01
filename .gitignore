@@ -35,3 +35,6 @@ digsync-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# mac stuff
+.DS_Store
+

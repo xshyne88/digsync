@@ -8,6 +8,8 @@ defmodule Digsync.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      # Ash Authentication necessity
+      {AshAuthentication.Supervisor, otp_app: :example},
       # Start the Telemetry supervisor
       DigsyncWeb.Telemetry,
       # Start the Ecto repository

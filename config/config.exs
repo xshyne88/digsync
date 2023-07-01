@@ -12,6 +12,7 @@ config :digsync,
 
 # Configures the endpoint
 config :digsync, DigsyncWeb.Endpoint,
+  adapter: Bandit.PhoenixAdapter,
   url: [host: "localhost"],
   render_errors: [
     formats: [html: DigsyncWeb.ErrorHTML, json: DigsyncWeb.ErrorJSON],
@@ -58,6 +59,15 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+# configure Bandit
+config :digsync, Digsync.Endpoint, adapter: Bandit.PhoenixAdapter
+
+config :digsync,
+  ash_apis: [Digsync.Accounts]
+
+# configure ash for relationships
+config :ash, :use_all_identities_in_manage_relationship?, false
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
