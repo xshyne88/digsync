@@ -9,3 +9,46 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+defmodule Seed do
+  defp user_attrs do
+    character = Faker.StarWars.character()
+
+    attrs = %{
+      # password: asdfasdf
+      hashed_password: "$2b$12$TZr.nM9lYj7W/f.A11LQ0Oe.gjKr8R65gY5CW8r1RjNZ5h4rD7anm",
+      phone_number: Faker.Phone.EnUs.phone(),
+      email: Faker.Internet.email()
+    }
+
+    character_list =
+      character
+      |> String.split(" ")
+      |> Enum.filter(&(&1 == " "))
+      |> case do
+        [name] ->
+          attrs
+          |> Map.put(:first_name, name)
+          |> Map.put(:last_name, Faker.StarWars.character())
+
+        [first_name, last_name] ->
+          attrs
+          |> Map.put(:first_name, first_name)
+          |> Map.put(:last_name, last_name)
+
+        _ ->
+          attrs
+          |> Map.put(:first_name, Faker.StarWars.character())
+          |> Map.put(:last_name, Faker.StarWars.character())
+      end
+  end
+
+  def start do
+    for _ <- 1..10 do
+      Digsync.Accounts.User
+      |> Ash.Changeset.for_create(:create, user_attrs())
+      |> Digsync.Accounts.create!()
+    end
+  end
+end
+
+Seed.start()

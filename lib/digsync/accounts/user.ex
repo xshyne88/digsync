@@ -3,15 +3,54 @@
 defmodule Digsync.Accounts.User do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshAuthentication]
+    extensions: [AshAuthentication, AshGraphql.Resource]
 
   attributes do
     uuid_primary_key :id
-    attribute :email, :ci_string, allow_nil?: false
+
+    attribute :email, :ci_string do
+      allow_nil? false
+
+      constraints match: ~r/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/
+    end
+
+    attribute :type, :atom do
+      default :user
+      constraints one_of: [:admin, :user, :guest]
+    end
+
+    attribute :create_type, :atom do
+      default :password
+      constraints one_of: [:password, :oauth2, :system]
+    end
+
     attribute :hashed_password, :string, allow_nil?: false, sensitive?: true
     attribute :first_name, :string
     attribute :last_name, :string
     attribute :phone_number, :string
+    create_timestamp :inserted_at
+    create_timestamp :updated_at
+  end
+
+  actions do
+    defaults [:create, :read, :update, :destroy]
+  end
+
+  graphql do
+    type :user
+    hide_fields([:hashed_password])
+
+    queries do
+      get(:get_user, :read)
+
+      list(:list_users, :read)
+    end
+
+    mutations do
+      create :create_user, :create
+      update :update_user, :update
+      destroy :destroy_user, :destroy
+    end
   end
 
   authentication do

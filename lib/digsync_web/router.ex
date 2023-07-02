@@ -17,6 +17,10 @@ defmodule DigsyncWeb.Router do
     plug :load_from_bearer
   end
 
+  pipeline :graphql do
+    plug AshGraphql.Plug
+  end
+
   scope "/", DigsyncWeb do
     pipe_through :browser
 
@@ -27,9 +31,24 @@ defmodule DigsyncWeb.Router do
     reset_route []
   end
 
+  forward "/api", Absinthe.Plug, schema: DigsyncWeb.Schema
+
+  forward "/playground", Absinthe.Plug.GraphiQL,
+    schema: DigsyncWeb.Schema,
+    interface: :playground
+
   # Other scopes may use custom stacks.
-  # scope "/api", DigsyncWeb do
-  #   pipe_through :api
+  # scope "/api" do
+  #   pipe_through [:api, :graphql]
+
+  #   # forward "/gql", Absinthe.Plug, schema: DigsyncWeb.Schema
+
+  #   forward "/playground",
+  #     to: Absinthe.Plug.GraphiQL,
+  #     init_opts: [
+  #       schema: DigsyncWeb.Schema,
+  #       interface: :playground
+  #     ]
   # end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

@@ -45,6 +45,7 @@ defmodule Digsync.MixProject do
       {:finch, "~> 0.13"},
       {:floki, ">= 0.30.0", only: :test},
       {:gettext, "~> 0.20"},
+      {:faker, "~> 0.17"},
       {:jason, "~> 1.2"},
       {:phoenix, "~> 1.7.6"},
       {:phoenix_ecto, "~> 4.4"},
@@ -75,7 +76,13 @@ defmodule Digsync.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["tailwind default", "esbuild default"],
-      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"],
+      reset: [
+        "ash_postgres.drop",
+        "ash_postgres.create",
+        "ash_postgres.migrate",
+        "run priv/repo/seeds.exs"
+      ]
     ]
   end
 end
