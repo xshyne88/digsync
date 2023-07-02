@@ -18,6 +18,9 @@ defmodule DigsyncWeb.Router do
   end
 
   pipeline :graphql do
+    plug :fetch_session
+    plug :load_from_session
+    plug DigsyncWeb.Plugs.ActorFromToken
     plug AshGraphql.Plug
   end
 
@@ -31,11 +34,15 @@ defmodule DigsyncWeb.Router do
     reset_route []
   end
 
-  forward "/api", Absinthe.Plug, schema: DigsyncWeb.Schema
+  scope "/graphql" do
+    pipe_through :graphql
 
-  forward "/playground", Absinthe.Plug.GraphiQL,
-    schema: DigsyncWeb.Schema,
-    interface: :playground
+    forward "/api", Absinthe.Plug, schema: DigsyncWeb.Schema
+
+    forward "/playground", Absinthe.Plug.GraphiQL,
+      schema: DigsyncWeb.Schema,
+      interface: :playground
+  end
 
   # Other scopes may use custom stacks.
   # scope "/api" do

@@ -10,6 +10,6 @@ defmodule Digsync.Accounts do
   end
 
   graphql do
-    authorize? false
+    authorize? true
   end
 end
