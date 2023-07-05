@@ -61,6 +61,7 @@ defmodule Digsync.MixProject do
       {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
+      {:tesla, "~> 1.4"},
       {:timex, "~> 3.7.11"}
     ]
   end

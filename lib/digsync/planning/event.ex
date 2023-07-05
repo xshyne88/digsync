@@ -3,6 +3,8 @@ defmodule Digsync.Planning.Event do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshGraphql.Resource]
 
+  import AshGeo.Validation
+
   postgres do
     table "events"
     repo Digsync.Repo
@@ -14,7 +16,8 @@ defmodule Digsync.Planning.Event do
     attribute :start_at, :utc_datetime
     attribute :end_at, :utc_datetime
 
-    attribute :address, :geometry
+    attribute :geo_point, :geometry
+    attribute :address, :string
 
     attribute :description, :string do
       default ""
@@ -26,7 +29,15 @@ defmodule Digsync.Planning.Event do
   end
 
   actions do
-    defaults [:create, :read, :update, :destroy]
+    defaults [:read, :update, :destroy]
+
+    create :create do
+      argument :geo_point, :geo_any
+
+      validate is_point(:geo_point)
+
+      change set_attribute(:geo_point, arg(:geo_point))
+    end
   end
 
   graphql do

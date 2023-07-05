@@ -29,6 +29,8 @@ defmodule Digsync.Accounts.User do
       constraints one_of: [:password, :oauth2, :system]
     end
 
+    attribute :address, :string
+
     attribute :hashed_password, :string, allow_nil?: false, sensitive?: true
     attribute :first_name, :string
     attribute :last_name, :string
