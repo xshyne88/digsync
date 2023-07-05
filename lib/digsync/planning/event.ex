@@ -1,45 +1,47 @@
-
 defmodule Digsync.Planning.Event do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshGraphql.Resource]
 
-    postgres do
-      table "events"
-      repo Digsync.Repo
+  postgres do
+    table "events"
+    repo Digsync.Repo
+  end
+
+  attributes do
+    uuid_primary_key :id
+
+    attribute :start_at, :utc_datetime
+    attribute :end_at, :utc_datetime
+
+    attribute :address, :geometry
+
+    attribute :description, :string do
+      default ""
+      constraints allow_empty?: false
     end
 
-    attributes do
-      uuid_primary_key :id
+    create_timestamp :inserted_at
+    create_timestamp :updated_at
+  end
 
-      attribute :start_at, :utc_datetime
-      attribute :end_at, :utc_datetime
+  actions do
+    defaults [:create, :read, :update, :destroy]
+  end
 
-      attribute :description, :string do
-        default ""
-        constraints allow_empty?: false
-      end
+  graphql do
+    type :event
 
-      create_timestamp :inserted_at
-      create_timestamp :updated_at
+    queries do
+      get(:get_event, :read)
+
+      list(:list_events, :read)
     end
 
-    actions do
-      defaults [:create, :read, :update, :destroy]
-    end
-
-    graphql do
-      type :event
-      queries do
-        get(:get_event, :read)
-
-        list(:list_events, :read)
-      end
-
-      mutations do
-        create :create_event, :create
-        update :update_event, :update
-        destroy :destroy_event, :destroy
-      end
+    mutations do
+      create :create_event, :create
+      update :update_event, :update
+      destroy :destroy_event, :destroy
     end
   end
+end

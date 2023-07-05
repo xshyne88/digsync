@@ -1,4 +1,4 @@
-defmodule Digsync.Repo.Migrations.AddCreateTypeToUsers do
+defmodule Digsync.Repo.Migrations.AddAddressToEvents do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 
@@ -8,14 +8,14 @@ defmodule Digsync.Repo.Migrations.AddCreateTypeToUsers do
   use Ecto.Migration
 
   def up do
-    alter table(:users) do
-      add :create_type, :text, default: "password"
+    alter table(:events) do
+      add :address, :geometry
     end
   end
 
   def down do
-    alter table(:users) do
-      remove :create_type
+    alter table(:events) do
+      remove :address
     end
   end
 end
