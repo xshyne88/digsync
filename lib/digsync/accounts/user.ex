@@ -5,6 +5,11 @@ defmodule Digsync.Accounts.User do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshAuthentication, AshGraphql.Resource]
 
+  postgres do
+    table "users"
+    repo Digsync.Repo
+  end
+
   attributes do
     uuid_primary_key :id
 
@@ -73,11 +78,6 @@ defmodule Digsync.Accounts.User do
 
       signing_secret(Application.compile_env(:digsync, DigsyncWeb.Endpoint)[:secret_key_base])
     end
-  end
-
-  postgres do
-    table "users"
-    repo Digsync.Repo
   end
 
   identities do

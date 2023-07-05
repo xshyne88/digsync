@@ -36,6 +36,23 @@ if config_env() == :prod do
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
     socket_options: maybe_ipv6
 
+  config :ash, :custom_types,
+    geometry: AshGeo.Geometry,
+    geo_json: AshGeo.GeoJson,
+    geo_wkt: AshGeo.GeoWkt,
+    geo_wkb: AshGeo.GeoWkb,
+    geo_any: AshGeo.GeoAny
+
+  if Mix.env() == :test do
+    Postgrex.Types.define(
+      Digsync.PostgresTypes,
+      [Geo.PostGIS.Extension] ++ Ecto.Adapters.Postgres.extensions(),
+      json: Jason
+    )
+
+    config :digsync, Digsync.Repo, types: Digsync.PostgresTypes
+  end
+
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
   # want to use a different value for prod and you most likely don't want

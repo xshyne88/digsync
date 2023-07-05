@@ -21,6 +21,18 @@ config :digsync, DigsyncWeb.Endpoint,
   pubsub_server: Digsync.PubSub,
   live_view: [signing_salt: "qNdz6N1W"]
 
+config :geo_postgis, json_library: Jason
+
+config :ash, :custom_types,
+  geometry: AshGeo.Geometry,
+  geo_json: AshGeo.GeoJson,
+  geo_wkt: AshGeo.GeoWkt,
+  geo_wkb: AshGeo.GeoWkb,
+  geo_any: AshGeo.GeoAny
+
+# You may add shorthands for any narrowed types here
+# point26918: CoolApp.Type.GeometryPoint26918,
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails
@@ -64,7 +76,7 @@ config :phoenix, :json_library, Jason
 config :digsync, Digsync.Endpoint, adapter: Bandit.PhoenixAdapter
 
 config :digsync,
-  ash_apis: [Digsync.Accounts]
+  ash_apis: [Digsync.Accounts, Digsync.Planning]
 
 # configure ash for relationships
 config :ash, :use_all_identities_in_manage_relationship?, false
