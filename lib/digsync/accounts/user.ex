@@ -60,6 +60,14 @@ defmodule Digsync.Accounts.User do
     create_timestamp(:updated_at, private?: false, allow_nil?: false)
   end
 
+  relationships do
+    many_to_many :friendships, Digsync.Accounts.User do
+      through(Digsync.Accounts.Friendship)
+      destination_attribute_on_join_resource(:first_id)
+      source_attribute_on_join_resource(:second_id)
+    end
+  end
+
   actions do
     defaults([:create, :read, :update, :destroy])
 
@@ -69,14 +77,6 @@ defmodule Digsync.Accounts.User do
       filter(id: actor(:id))
     end
   end
-
-  # relationships do
-  #   many_to_many :friendships, Digsync.Account.User do
-  #     through Digsync.Accounts.Friendship
-  #     destination_attribute_on_join_resource :user_id
-  #     source_attribute_on_join_resource :user_id
-  #   end
-  # end
 
   graphql do
     type(:user)

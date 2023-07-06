@@ -1,6 +1,7 @@
 defmodule Digsync.Accounts.Friendship do
   use Ash.Resource,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshGraphql.Resource]
 
   postgres do
     table("friendships")
@@ -11,7 +12,7 @@ defmodule Digsync.Accounts.Friendship do
     uuid_primary_key(:id)
 
     attribute :friendship_type, :atom do
-      default :pending_first_second
+      default(:pending_first_second)
 
       constraints(
         one_of: [
@@ -33,8 +34,8 @@ defmodule Digsync.Accounts.Friendship do
     defaults([:create, :read, :update, :destroy])
   end
 
-  # relationships do
-  #   belongs_to :user, Digsync.Accounts.User, primary_key?: true, allow_nil?: false
-  #   belongs_to :user, Digsync.Accounts.User, primary_key?: true, allow_nil?: false
-  # end
+  relationships do
+    belongs_to(:first, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
+    belongs_to(:second, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
+  end
 end
