@@ -20,7 +20,7 @@ defmodule DigsyncWeb.Router do
   pipeline :graphql do
     plug :fetch_session
     plug :load_from_session
-    plug DigsyncWeb.Plugs.ActorFromToken
+    plug DigsyncWeb.Plugs.SetActor
     plug AshGraphql.Plug
   end
 
@@ -41,7 +41,7 @@ defmodule DigsyncWeb.Router do
 
     forward "/playground", Absinthe.Plug.GraphiQL,
       schema: DigsyncWeb.Schema,
-      interface: :playground
+      interface: :advanced
   end
 
   # Other scopes may use custom stacks.

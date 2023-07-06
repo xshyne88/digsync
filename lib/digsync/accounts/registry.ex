@@ -4,5 +4,6 @@ defmodule Digsync.Accounts.Registry do
   entries do
     entry Digsync.Accounts.User
     entry Digsync.Accounts.Token
+    entry Digsync.Accounts.Friendship
   end
 end

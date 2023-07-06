@@ -5,6 +5,20 @@ defmodule Digsync.Accounts.Emails do
 
   import Swoosh.Email
 
+  def deliver_magic_link(user, url) do
+    deliver(user.email, "Magic Link", """
+    <html>
+      <p>
+        Hi #{user.email},
+      </p>
+
+      <p>
+        <a href="#{url}">Click here</a> to login.
+      </p>
+    <html>
+    """)
+  end
+
   def deliver_reset_password_instructions(user, url) do
     if !url do
       raise "Cannot deliver reset instructions without a url"
@@ -12,17 +26,17 @@ defmodule Digsync.Accounts.Emails do
 
     deliver(user.email, "Reset Your Password", """
     <html>
-    <p>
-    Hi #{user.email},
-    </p>
+      <p>
+        Hi #{user.email},
+      </p>
 
-    <p>
-    <a href="#{url}">Click here</a> to reset your password.
-    </p>
+      <p>
+        <a href="#{url}">Click here</a> to reset your password.
+      </p>
 
-    <p>
-    If you didn't request this change, please ignore this.
-    </p>
+      <p>
+        If you didn't request this change, please ignore this.
+      </p>
     <html>
     """)
   end
@@ -34,7 +48,7 @@ defmodule Digsync.Accounts.Emails do
   #   * Bamboo - https://hexdocs.pm/bamboo
   #
   defp deliver(to, subject, body) do
-    IO.puts("Sending email to #{to} with subject #{subject} and body #{body}")
+    # IO.puts("Sending email to #{to} with subject #{subject} and body #{body}")
 
     new()
     |> from({"chase", "chasehomedecor@gmail.com"})
