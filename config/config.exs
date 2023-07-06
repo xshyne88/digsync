@@ -23,6 +23,8 @@ config :digsync, DigsyncWeb.Endpoint,
 
 config :geo_postgis, json_library: Jason
 
+config :ash, :utc_datetime_type, :datetime
+
 config :ash, :custom_types,
   geometry: AshGeo.Geometry,
   geo_json: AshGeo.GeoJson,

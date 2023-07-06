@@ -17,6 +17,9 @@ defmodule Digsync.Planning.Event do
     attribute :end_at, :utc_datetime
 
     attribute :geo_point, :geometry
+
+    attribute :city, :string
+    attribute :state, :string
     attribute :address, :string
 
     attribute :description, :string do

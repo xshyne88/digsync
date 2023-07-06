@@ -35,8 +35,29 @@ defmodule Digsync.Accounts.User do
     attribute :first_name, :string
     attribute :last_name, :string
     attribute :phone_number, :string
-    create_timestamp :inserted_at
-    create_timestamp :updated_at
+
+    attribute :facebook_link, :string
+    attribute :instagram_link, :string
+    attribute :linkedin_link, :string
+    attribute :github_link, :string
+
+    attribute :gender, :atom do
+      default :male
+      constraints one_of: Digsync.Types.Gender.values()
+    end
+
+    attribute :age, :integer do
+      constraints min: 18, max: 99
+    end
+
+    attribute :bio, :string
+
+    attribute :skill_level, :atom do
+      constraints one_of: Digsync.Types.SkillLevel.values()
+    end
+
+    create_timestamp :inserted_at, private?: false, allow_nil?: false
+    create_timestamp :updated_at, private?: false, allow_nil?: false
   end
 
   actions do

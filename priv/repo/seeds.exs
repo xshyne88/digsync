@@ -10,6 +10,13 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 defmodule Seed do
+  defp take_one(list) do
+    list
+    |> Enum.shuffle()
+    |> Enum.take(1)
+    |> List.first()
+  end
+
   defp user_attrs do
     character = Faker.StarWars.character()
 
@@ -17,7 +24,17 @@ defmodule Seed do
       # password: asdfasdf
       hashed_password: "$2b$12$TZr.nM9lYj7W/f.A11LQ0Oe.gjKr8R65gY5CW8r1RjNZ5h4rD7anm",
       phone_number: Faker.Phone.EnUs.phone(),
-      email: Faker.Internet.email()
+      email: Faker.Internet.email(),
+      type: :user,
+      create_type: :system,
+      facebook_link: Faker.Internet.url(),
+      instagram_link: Faker.Internet.url(),
+      linkedin_link: Faker.Internet.url(),
+      github_link: Faker.Internet.url(),
+      gender: :male,
+      age: :rand.uniform(40) + 16,
+      bio: take_one(Faker.Lorem.sentences(:rand.uniform(3) + 1)),
+      skill_level: take_one(Digsync.Types.SkillLevel.values())
     }
 
     character_list =
