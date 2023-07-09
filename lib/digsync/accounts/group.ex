@@ -13,6 +13,12 @@ defmodule Digsync.Accounts.Group do
 
     attribute :name, :string do
       allow_nil? false
+
+      constraints max_length: 20,
+                  min_length: 3,
+                  match: ~r/^[a-z_-]*$/,
+                  trim?: true,
+                  allow_empty?: false
     end
 
     attribute :description, :string do
@@ -35,6 +41,10 @@ defmodule Digsync.Accounts.Group do
     defaults([:create, :read, :update, :destroy])
   end
 
+  identities do
+    identity(:unique_group_name, [:name])
+  end
+
   relationships do
     belongs_to(:creator, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
 
@@ -46,8 +56,4 @@ defmodule Digsync.Accounts.Group do
       source_attribute_on_join_resource(:member_id)
     end
   end
-
-  # identities do
-  # identity(:unique_group_name, [:name])
-  # end
 end
