@@ -43,6 +43,7 @@ defmodule Digsync.Accounts.Group do
 
   identities do
     identity(:unique_group_name, [:name])
+    identity(:uniq_id, [:id])
   end
 
   relationships do
