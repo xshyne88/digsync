@@ -40,11 +40,11 @@ defmodule Digsync.Accounts.Group do
 
     # has_many :messages, Digsync.Accounts.Message
 
-    # many_to_many :group_members, Digsync.Accounts.User do
-    #   through(Digsync.Accounts.GroupMembership)
-    #   destination_attribute_on_join_resource(:group_id)
-    #   source_attribute_on_join_resource(:member_id)
-    # end
+    many_to_many :group_members, Digsync.Accounts.User do
+      through(Digsync.Accounts.GroupMembership)
+      destination_attribute_on_join_resource(:group_id)
+      source_attribute_on_join_resource(:member_id)
+    end
   end
 
   # identities do
