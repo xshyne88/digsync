@@ -24,7 +24,14 @@ defmodule Digsync.Planning.Event do
 
     attribute :description, :string do
       default ""
-      constraints allow_empty?: false
+    end
+
+    attribute :min_age_range, :integer do
+      constraints(min: 16)
+    end
+
+    attribute :max_age_range, :integer do
+      constraints(min: 16)
     end
 
     create_timestamp :inserted_at
@@ -41,6 +48,14 @@ defmodule Digsync.Planning.Event do
 
       change set_attribute(:geo_point, arg(:geo_point))
     end
+  end
+
+  relationships do
+    belongs_to(:creator, Digsync.Accounts.User,
+      primary_key?: true,
+      allow_nil?: false,
+      api: Digsync.Accounts
+    )
   end
 
   graphql do

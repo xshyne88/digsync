@@ -48,7 +48,7 @@ defmodule Digsync.Accounts.Emails do
   #   * Bamboo - https://hexdocs.pm/bamboo
   #
   defp deliver(to, subject, body) do
-    # IO.puts("Sending email to #{to} with subject #{subject} and body #{body}")
+    IO.puts("Sending email to #{to} with subject #{subject} and body #{body}")
 
     new()
     |> from({"chase", "chasehomedecor@gmail.com"})

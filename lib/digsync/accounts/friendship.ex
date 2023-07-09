@@ -38,4 +38,8 @@ defmodule Digsync.Accounts.Friendship do
     belongs_to(:first, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
     belongs_to(:second, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
   end
+
+  identities do
+    identity :unique_friendship, [:first_id, :second_id]
+  end
 end

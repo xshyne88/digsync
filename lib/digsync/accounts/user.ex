@@ -1,5 +1,3 @@
-# lib/my_app/accounts/user.ex
-
 defmodule Digsync.Accounts.User do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
@@ -60,14 +58,6 @@ defmodule Digsync.Accounts.User do
     create_timestamp(:updated_at, private?: false, allow_nil?: false)
   end
 
-  relationships do
-    many_to_many :friendships, Digsync.Accounts.User do
-      through(Digsync.Accounts.Friendship)
-      destination_attribute_on_join_resource(:first_id)
-      source_attribute_on_join_resource(:second_id)
-    end
-  end
-
   actions do
     defaults([:create, :read, :update, :destroy])
 
@@ -75,6 +65,35 @@ defmodule Digsync.Accounts.User do
       get?(true)
 
       filter(id: actor(:id))
+    end
+
+    # read :a_user do
+    #   argument :something, :uuid do
+    #     allow_nil? false
+    #   end
+
+    #   get?(true)
+
+    #   # prepare build(load: [friendships: [:first, :second]])
+    #   prepare build(load: [:friendships])
+
+    #   filter expr(id == ^arg(:something))
+    # end
+
+    update :send_friendship_request do
+      argument :target_friend, :uuid do
+        allow_nil? false
+      end
+
+      change manage_relationship(:target_friend, :friendships, type: :create)
+    end
+  end
+
+  relationships do
+    many_to_many :friendships, Digsync.Accounts.User do
+      through(Digsync.Accounts.Friendship)
+      destination_attribute_on_join_resource(:first_id)
+      source_attribute_on_join_resource(:second_id)
     end
   end
 
@@ -93,7 +112,13 @@ defmodule Digsync.Accounts.User do
     mutations do
       create(:create_user, :create)
       update(:update_user, :update)
+      update(:send_friendship_request, :update)
+
       destroy(:destroy_user, :destroy)
+    end
+
+    managed_relationships do
+      managed_relationship(:send_friendship_request, :friendships)
     end
   end
 
