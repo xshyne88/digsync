@@ -8,17 +8,22 @@ defmodule Digsync.Accounts.Message do
     repo(Digsync.Repo)
   end
 
-  actions do
-    defaults [:read, :create, :update, :destroy]
-  end
-
   attributes do
     uuid_primary_key(:id)
 
     attribute :text, :string
   end
 
-  # relationships do
-  # belongs_to(:author, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
-  # end
+  actions do
+    defaults [:read, :update, :destroy]
+
+    create :create do
+      primary? true
+      change relate_actor(:creator)
+    end
+  end
+
+  relationships do
+    belongs_to(:creator, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
+  end
 end

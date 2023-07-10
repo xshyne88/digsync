@@ -2,6 +2,13 @@ alias Digsync.Geo.Helpers
 alias Digsync.Planning.Event
 alias Digsync.GeoCensus.Client
 alias Digsync.Accounts.User
+alias Digsync.Accounts.Group
+alias Digsync.Accounts.Message
+alias Digsync.Accounts.PrivateMessage
+alias Digsync.Accounts.GroupMembership
+alias Digsync.Accounts.Token
+alias Digsync.Accounts.Friendship
+alias Digsync.Accounts
 
 defmodule Console do
   # def make_event do

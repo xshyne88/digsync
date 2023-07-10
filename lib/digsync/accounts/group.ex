@@ -14,9 +14,7 @@ defmodule Digsync.Accounts.Group do
     attribute :name, :string do
       allow_nil? false
 
-      constraints max_length: 20,
-                  min_length: 3,
-                  match: ~r/^[a-z_-]*$/,
+      constraints min_length: 3,
                   trim?: true,
                   allow_empty?: false
     end
@@ -30,6 +28,7 @@ defmodule Digsync.Accounts.Group do
     attribute :preferred_location, :string
 
     attribute :type, :atom do
+      default :social
       constraints one_of: [:club, :bar, :social]
     end
 
@@ -38,7 +37,11 @@ defmodule Digsync.Accounts.Group do
   end
 
   actions do
-    defaults([:create, :read, :update, :destroy])
+    defaults([:read, :update, :destroy])
+
+    create :actor_create do
+      change relate_actor(:creator)
+    end
   end
 
   identities do
@@ -48,8 +51,6 @@ defmodule Digsync.Accounts.Group do
 
   relationships do
     belongs_to(:creator, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
-
-    # has_many :messages, Digsync.Accounts.Message
 
     many_to_many :group_members, Digsync.Accounts.User do
       through(Digsync.Accounts.GroupMembership)
