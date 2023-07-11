@@ -11,53 +11,53 @@
       "type": "uuid"
     },
     {
-      "allow_nil?": true,
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "start_at",
-      "type": "utc_datetime"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "end_at",
-      "type": "utc_datetime"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "geo_point",
-      "type": "geometry"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "address",
+      "source": "name",
       "type": "text"
     },
     {
-      "allow_nil?": true,
-      "default": "\"\"",
+      "allow_nil?": false,
+      "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
       "source": "description",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "locaton",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "preferred_location",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "\"social\"",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "type",
       "type": "text"
     },
     {
@@ -79,6 +79,31 @@
       "size": null,
       "source": "updated_at",
       "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": true,
+      "references": {
+        "destination_attribute": "id",
+        "destination_attribute_default": null,
+        "destination_attribute_generated": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "groups_creator_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "primary_key?": true,
+        "schema": "public",
+        "table": "users"
+      },
+      "size": null,
+      "source": "creator_id",
+      "type": "uuid"
     }
   ],
   "base_filter": null,
@@ -86,8 +111,25 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "267AAFCE172B7315866F02F1E60FA6F8BFD191A8ED704159DBC3692225C384E6",
-  "identities": [],
+  "hash": "20BE722537E754FB17849ED97063390891FFBA5BA9D4DFA232E511484516EE2D",
+  "identities": [
+    {
+      "base_filter": null,
+      "index_name": "groups_unique_group_id_index",
+      "keys": [
+        "id"
+      ],
+      "name": "unique_group_id"
+    },
+    {
+      "base_filter": null,
+      "index_name": "groups_unique_group_name_index",
+      "keys": [
+        "name"
+      ],
+      "name": "unique_group_name"
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -95,5 +137,5 @@
   },
   "repo": "Elixir.Digsync.Repo",
   "schema": null,
-  "table": "events"
+  "table": "groups"
 }

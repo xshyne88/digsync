@@ -26,4 +26,8 @@ defmodule Digsync.Accounts.Message do
   relationships do
     belongs_to(:creator, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
   end
+
+  identities do
+    identity :unique_message_id, [:id]
+  end
 end

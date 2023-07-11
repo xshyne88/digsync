@@ -4,7 +4,7 @@ defmodule Digsync.Accounts.GroupMessage do
     extensions: [AshGraphql.Resource]
 
   postgres do
-    table("private_messages")
+    table("group_messages")
     repo(Digsync.Repo)
   end
 

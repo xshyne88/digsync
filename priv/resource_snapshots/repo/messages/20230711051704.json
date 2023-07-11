@@ -51,8 +51,17 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "377F8EE0C625B23081DEFD6AE3FBE60C95AA027CC7FFA6B9A64E9340000369CC",
-  "identities": [],
+  "hash": "2710B5E428271B5996A07743A6D8A15C0D408A1903CD20F438537BE17C3E24F4",
+  "identities": [
+    {
+      "base_filter": null,
+      "index_name": "messages_unique_message_id_index",
+      "keys": [
+        "id"
+      ],
+      "name": "unique_message_id"
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
