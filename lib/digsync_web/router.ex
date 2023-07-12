@@ -32,6 +32,8 @@ defmodule DigsyncWeb.Router do
     sign_out_route AuthController
     auth_routes_for Digsync.Accounts.User, to: AuthController
     reset_route []
+
+    # ash_admin("/admin")
   end
 
   scope "/graphql" do

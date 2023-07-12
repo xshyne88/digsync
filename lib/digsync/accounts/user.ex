@@ -14,6 +14,7 @@ defmodule Digsync.Accounts.User do
     attribute :email, :ci_string do
       allow_nil?(false)
 
+      # TODO: make constraint better than the default
       constraints(match: ~r/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/)
     end
 
@@ -59,23 +60,13 @@ defmodule Digsync.Accounts.User do
   end
 
   actions do
-    defaults([:create, :read, :destroy])
+    defaults([:read, :create, :update, :destroy])
 
     read :current_user do
       get?(true)
 
       filter(id: actor(:id))
     end
-
-    # update :send_friendship_request do
-    #   accept []
-
-    #   argument :receiver, :uuid do
-    #     allow_nil? false
-    #   end
-
-    #   change manage_relationship(:receiver, :friend_requests, type: :create)
-    # end
   end
 
   relationships do
@@ -105,6 +96,7 @@ defmodule Digsync.Accounts.User do
     end
 
     mutations do
+      # TODO: only expose certain things
       create(:create_user, :create)
       # update(:update_user, :update)
       # update(:send_friendship_request, :update)
@@ -112,6 +104,7 @@ defmodule Digsync.Accounts.User do
       # destroy(:destroy_user, :destroy)
     end
 
+    # TODO: add relationship mutations
     # managed_relationships do
     #   managed_relationship(:send_friendship_request, :friendships)
     # end

@@ -13,10 +13,11 @@ defmodule Digsync.Accounts.FriendRequest do
 
     create_timestamp(:inserted_at, private?: false, allow_nil?: false)
     create_timestamp(:updated_at, private?: false, allow_nil?: false)
+    create_timestamp(:deleted_at, private?: false)
   end
 
   actions do
-    defaults([:create, :read, :update, :destroy])
+    defaults([:create, :read, :update])
 
     create :send_friendship_request do
       accept []
@@ -33,6 +34,9 @@ defmodule Digsync.Accounts.FriendRequest do
       argument :friendship_id, :uuid do
         allow_nil? false
       end
+
+      change set_attribute(:deleted_at, &DateTime.utc_now/0)
+      soft? true
     end
   end
 

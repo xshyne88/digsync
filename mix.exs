@@ -35,6 +35,7 @@ defmodule Digsync.MixProject do
       {:absinthe, "~> 1.7.0"},
       {:absinthe_plug, "~> 1.5.8"},
       {:ash, "~> 2.10"},
+      # {:ash_admin, "~> 0.8.1"},
       {:ash_authentication_phoenix, "~> 1.7.2"},
       {:ash_geo, "~> 0.1"},
       {:ash_phoenix, "~> 1.2"},
