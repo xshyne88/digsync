@@ -24,9 +24,16 @@ defmodule Seed do
         |> Digsync.Accounts.create!()
       end)
 
+    admin =
+      Digsync.Accounts.User
+      |> Ash.Changeset.for_create(:create, UserSeed.default_user())
+      |> Digsync.Accounts.create!()
+
     Enum.each(users, fn user ->
       Logger.info("Created User: #{user.first_name} #{user.last_name} - #{user.email}")
     end)
+
+    Logger.info("Created Actor Admin: #{admin.first_name} #{admin.last_name} - #{admin.email}")
   end
 end
 

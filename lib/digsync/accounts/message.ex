@@ -19,12 +19,12 @@ defmodule Digsync.Accounts.Message do
 
     create :create do
       primary? true
-      change relate_actor(:creator)
+      change relate_actor(:author)
     end
   end
 
   relationships do
-    belongs_to(:creator, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
+    belongs_to(:author, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
   end
 
   identities do

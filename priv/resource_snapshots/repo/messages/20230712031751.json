@@ -34,7 +34,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "messages_creator_id_fkey",
+        "name": "messages_author_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -42,7 +42,7 @@
         "table": "users"
       },
       "size": null,
-      "source": "creator_id",
+      "source": "author_id",
       "type": "uuid"
     }
   ],
@@ -51,7 +51,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "2710B5E428271B5996A07743A6D8A15C0D408A1903CD20F438537BE17C3E24F4",
+  "hash": "DF11DF9F941D21508C20A20223AB2E1666E316BB4ECE6369BCD23F5B7F7C3E88",
   "identities": [
     {
       "base_filter": null,

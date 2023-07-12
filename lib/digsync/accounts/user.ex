@@ -59,7 +59,7 @@ defmodule Digsync.Accounts.User do
   end
 
   actions do
-    defaults([:create, :read, :update, :destroy])
+    defaults([:create, :read, :destroy])
 
     read :current_user do
       get?(true)
@@ -67,33 +67,28 @@ defmodule Digsync.Accounts.User do
       filter(id: actor(:id))
     end
 
-    # read :a_user do
-    #   argument :something, :uuid do
+    # update :send_friendship_request do
+    #   accept []
+
+    #   argument :receiver, :uuid do
     #     allow_nil? false
     #   end
 
-    #   get?(true)
-
-    #   # prepare build(load: [friendships: [:first, :second]])
-    #   prepare build(load: [:friendships])
-
-    #   filter expr(id == ^arg(:something))
+    #   change manage_relationship(:receiver, :friend_requests, type: :create)
     # end
-
-    update :send_friendship_request do
-      argument :target_friend, :uuid do
-        allow_nil? false
-      end
-
-      change manage_relationship(:target_friend, :friendships, type: :create)
-    end
   end
 
   relationships do
     many_to_many :friendships, Digsync.Accounts.User do
       through(Digsync.Accounts.Friendship)
-      destination_attribute_on_join_resource(:first_id)
-      source_attribute_on_join_resource(:second_id)
+      destination_attribute_on_join_resource(:friend_one_id)
+      source_attribute_on_join_resource(:friend_two_id)
+    end
+
+    many_to_many :friend_requests, Digsync.Accounts.User do
+      through(Digsync.Accounts.FriendRequest)
+      destination_attribute_on_join_resource(:sender_id)
+      source_attribute_on_join_resource(:receiver_id)
     end
   end
 
@@ -111,15 +106,15 @@ defmodule Digsync.Accounts.User do
 
     mutations do
       create(:create_user, :create)
-      update(:update_user, :update)
-      update(:send_friendship_request, :update)
+      # update(:update_user, :update)
+      # update(:send_friendship_request, :update)
 
-      destroy(:destroy_user, :destroy)
+      # destroy(:destroy_user, :destroy)
     end
 
-    managed_relationships do
-      managed_relationship(:send_friendship_request, :friendships)
-    end
+    # managed_relationships do
+    #   managed_relationship(:send_friendship_request, :friendships)
+    # end
   end
 
   authentication do

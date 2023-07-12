@@ -11,36 +11,6 @@
       "type": "uuid"
     },
     {
-      "allow_nil?": true,
-      "default": "\"pending_first_second\"",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "friendship_type",
-      "type": "text"
-    },
-    {
-      "allow_nil?": false,
-      "default": "fragment(\"now()\")",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "inserted_at",
-      "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": false,
-      "default": "fragment(\"now()\")",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "updated_at",
-      "type": "utc_datetime_usec"
-    },
-    {
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
@@ -54,15 +24,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "friendships_first_id_fkey",
+        "name": "private_messages_message_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "users"
+        "table": "messages"
       },
       "size": null,
-      "source": "first_id",
+      "source": "message_id",
       "type": "uuid"
     },
     {
@@ -79,7 +49,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "friendships_second_id_fkey",
+        "name": "private_messages_recipient_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -87,7 +57,7 @@
         "table": "users"
       },
       "size": null,
-      "source": "second_id",
+      "source": "recipient_id",
       "type": "uuid"
     }
   ],
@@ -96,18 +66,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "1EB504233169BF4DC0F76EF0F6FB9344488CF6250D3AE04E086FD71968F8FBDF",
-  "identities": [
-    {
-      "base_filter": null,
-      "index_name": "friendships_unique_friendship_index",
-      "keys": [
-        "first_id",
-        "second_id"
-      ],
-      "name": "unique_friendship"
-    }
-  ],
+  "hash": "D3AD973F3371C7B45A4285D506D245CA4FDDA495C6D099A95AF7EA6388CBC5FC",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -115,5 +75,5 @@
   },
   "repo": "Elixir.Digsync.Repo",
   "schema": null,
-  "table": "friendships"
+  "table": "private_messages"
 }

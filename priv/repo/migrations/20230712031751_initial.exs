@@ -1,4 +1,4 @@
-defmodule Digsync.Repo.Migrations.InitialSetup do
+defmodule Digsync.Repo.Migrations.Initial do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 
@@ -45,18 +45,17 @@ defmodule Digsync.Repo.Migrations.InitialSetup do
     create table(:private_messages, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
       add :message_id, :uuid, null: false, primary_key: true
-      add :first_id, :uuid, null: false, primary_key: true
-      add :second_id, :uuid, null: false, primary_key: true
+      add :recipient_id, :uuid, null: false, primary_key: true
     end
 
     create table(:messages, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
       add :text, :text
 
-      add :creator_id,
+      add :author_id,
           references(:users,
             column: :id,
-            name: "messages_creator_id_fkey",
+            name: "messages_author_id_fkey",
             type: :uuid,
             prefix: "public"
           ),
@@ -75,18 +74,10 @@ defmodule Digsync.Repo.Migrations.InitialSetup do
                prefix: "public"
              )
 
-      modify :first_id,
+      modify :recipient_id,
              references(:users,
                column: :id,
-               name: "private_messages_first_id_fkey",
-               type: :uuid,
-               prefix: "public"
-             )
-
-      modify :second_id,
-             references(:users,
-               column: :id,
-               name: "private_messages_second_id_fkey",
+               name: "private_messages_recipient_id_fkey",
                type: :uuid,
                prefix: "public"
              )
@@ -144,24 +135,23 @@ defmodule Digsync.Repo.Migrations.InitialSetup do
 
     create table(:friendships, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
-      add :friendship_type, :text, default: "pending_first_second"
       add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
       add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
 
-      add :first_id,
+      add :friend_one_id,
           references(:users,
             column: :id,
-            name: "friendships_first_id_fkey",
+            name: "friendships_friend_one_id_fkey",
             type: :uuid,
             prefix: "public"
           ),
           primary_key: true,
           null: false
 
-      add :second_id,
+      add :friend_two_id,
           references(:users,
             column: :id,
-            name: "friendships_second_id_fkey",
+            name: "friendships_friend_two_id_fkey",
             type: :uuid,
             prefix: "public"
           ),
@@ -169,8 +159,38 @@ defmodule Digsync.Repo.Migrations.InitialSetup do
           null: false
     end
 
-    create unique_index(:friendships, [:first_id, :second_id],
+    create unique_index(:friendships, [:friend_one_id, :friend_two_id],
              name: "friendships_unique_friendship_index"
+           )
+
+    create table(:friend_requests, primary_key: false) do
+      add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
+      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+
+      add :sender_id,
+          references(:users,
+            column: :id,
+            name: "friend_requests_sender_id_fkey",
+            type: :uuid,
+            prefix: "public"
+          ),
+          primary_key: true,
+          null: false
+
+      add :receiver_id,
+          references(:users,
+            column: :id,
+            name: "friend_requests_receiver_id_fkey",
+            type: :uuid,
+            prefix: "public"
+          ),
+          primary_key: true,
+          null: false
+    end
+
+    create unique_index(:friend_requests, [:sender_id, :receiver_id],
+             name: "friend_requests_unique_friend_request_index"
            )
 
     create table(:events, primary_key: false) do
@@ -204,13 +224,23 @@ defmodule Digsync.Repo.Migrations.InitialSetup do
 
     drop table(:events)
 
-    drop_if_exists unique_index(:friendships, [:first_id, :second_id],
+    drop_if_exists unique_index(:friend_requests, [:sender_id, :receiver_id],
+                     name: "friend_requests_unique_friend_request_index"
+                   )
+
+    drop constraint(:friend_requests, "friend_requests_sender_id_fkey")
+
+    drop constraint(:friend_requests, "friend_requests_receiver_id_fkey")
+
+    drop table(:friend_requests)
+
+    drop_if_exists unique_index(:friendships, [:friend_one_id, :friend_two_id],
                      name: "friendships_unique_friendship_index"
                    )
 
-    drop constraint(:friendships, "friendships_first_id_fkey")
+    drop constraint(:friendships, "friendships_friend_one_id_fkey")
 
-    drop constraint(:friendships, "friendships_second_id_fkey")
+    drop constraint(:friendships, "friendships_friend_two_id_fkey")
 
     drop table(:friendships)
 
@@ -230,19 +260,16 @@ defmodule Digsync.Repo.Migrations.InitialSetup do
 
     drop constraint(:private_messages, "private_messages_message_id_fkey")
 
-    drop constraint(:private_messages, "private_messages_first_id_fkey")
-
-    drop constraint(:private_messages, "private_messages_second_id_fkey")
+    drop constraint(:private_messages, "private_messages_recipient_id_fkey")
 
     alter table(:private_messages) do
-      modify :second_id, :uuid
-      modify :first_id, :uuid
+      modify :recipient_id, :uuid
       modify :message_id, :uuid
     end
 
     drop_if_exists unique_index(:messages, [:id], name: "messages_unique_message_id_index")
 
-    drop constraint(:messages, "messages_creator_id_fkey")
+    drop constraint(:messages, "messages_author_id_fkey")
 
     drop table(:messages)
 

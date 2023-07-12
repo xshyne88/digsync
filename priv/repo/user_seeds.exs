@@ -1,4 +1,14 @@
 defmodule UserSeed do
+  def default_user do
+    attrs = default_user_input(:default)
+
+    attrs
+    |> Map.put(:first_name, "Chase")
+    |> Map.put(:last_name, "Philips")
+    |> Map.put(:email, "chasehomedecor@gmail.com")
+    |> Map.put(:address, "1100 3rd Ave N, Nasheville, TN 37208")
+  end
+
   def default_user_input(type \\ :seinfeld) do
     attrs = %{
       # password: asdfasdf
@@ -71,6 +81,8 @@ defmodule UserSeed do
         attrs
     end
   end
+
+  defp put_name(attrs, _), do: attrs
 
   defp seinfeld_email(name), do: name <> String.slice(Faker.UUID.v4(), -7, 7) <> "@seinfeld.com"
 

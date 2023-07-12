@@ -18,7 +18,6 @@ defmodule Digsync.Accounts.PrivateMessage do
 
   relationships do
     belongs_to(:message, Digsync.Accounts.Message, primary_key?: true, allow_nil?: false)
-    belongs_to(:first, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
-    belongs_to(:second, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
+    belongs_to(:recipient, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
   end
 end
