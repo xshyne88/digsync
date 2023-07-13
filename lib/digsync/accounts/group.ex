@@ -54,8 +54,10 @@ defmodule Digsync.Accounts.Group do
 
     many_to_many :group_members, Digsync.Accounts.User do
       through(Digsync.Accounts.GroupMembership)
-      destination_attribute_on_join_resource(:group_id)
-      source_attribute_on_join_resource(:member_id)
+      # resolves to User
+      destination_attribute_on_join_resource(:member_id)
+      # resolves to Group
+      source_attribute_on_join_resource(:group_id)
     end
   end
 end
