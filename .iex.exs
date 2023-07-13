@@ -46,6 +46,12 @@ defmodule Console do
     Logger.info("Getting ID for email: #{email}")
     id
   end
+
+  def l(type) do
+    Group
+    |> Ash.Query.load(type)
+    |> Accounts.read!()
+  end
 end
 
 Console.set_actor()
