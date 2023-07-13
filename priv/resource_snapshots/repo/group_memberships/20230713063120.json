@@ -24,7 +24,7 @@
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
-      "primary_key?": true,
+      "primary_key?": false,
       "references": {
         "destination_attribute": "id",
         "destination_attribute_default": null,
@@ -49,7 +49,7 @@
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
-      "primary_key?": true,
+      "primary_key?": false,
       "references": {
         "destination_attribute": "id",
         "destination_attribute_default": null,
@@ -75,9 +75,19 @@
   "check_constraints": [],
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": false,
-  "hash": "329FF063AB1AE6BC5ABE2395B550AD86641ECBA0B1000E50B11B3E2C6F4D9C2A",
-  "identities": [],
+  "has_create_action": true,
+  "hash": "B8D003BE867782721783A93C8164357A0D07CA5C80E68C4E2A44ED8EB17EF80E",
+  "identities": [
+    {
+      "base_filter": null,
+      "index_name": "group_memberships_unique_group_member_index",
+      "keys": [
+        "group_id",
+        "member_id"
+      ],
+      "name": "unique_group_member"
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,

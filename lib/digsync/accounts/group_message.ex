@@ -17,7 +17,7 @@ defmodule Digsync.Accounts.GroupMessage do
   end
 
   relationships do
-    belongs_to(:message, Digsync.Accounts.Message, primary_key?: true, allow_nil?: false)
-    belongs_to(:group, Digsync.Accounts.Group, primary_key?: true, allow_nil?: false)
+    belongs_to(:message, Digsync.Accounts.Message, allow_nil?: false)
+    belongs_to(:group, Digsync.Accounts.Group, allow_nil?: false)
   end
 end

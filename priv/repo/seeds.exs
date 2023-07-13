@@ -29,6 +29,22 @@ defmodule Seed do
       |> Ash.Changeset.for_create(:create, UserSeed.default_user())
       |> Digsync.Accounts.create!()
 
+    group =
+      Digsync.Accounts.Group
+      |> Ash.Changeset.for_create(:create, %{name: "Family Guy", description: "The Griffins"},
+        actor: admin
+      )
+      |> Digsync.Accounts.create!()
+
+    Logger.info("Created Group: #{group.name}")
+
+    group_membership =
+      Digsync.Accounts.GroupMembership
+      |> Ash.Changeset.for_create(:add_to_group, %{group: group.id}, actor: admin)
+      |> Digsync.Accounts.create!()
+
+    Logger.info("Added #{admin.id} to Group: #{group.id}")
+
     Enum.each(users, fn user ->
       Logger.info("Created User: #{user.first_name} #{user.last_name} - #{user.email}")
     end)

@@ -8,9 +8,9 @@ defmodule Digsync.Accounts.FriendRequest do
     repo(Digsync.Repo)
   end
 
-  resource do
-    base_filter is_nil: :deleted_at
-  end
+  # resource do
+  #   base_filter is_nil: :deleted_at
+  # end
 
   attributes do
     uuid_primary_key(:id)
@@ -51,8 +51,8 @@ defmodule Digsync.Accounts.FriendRequest do
   end
 
   relationships do
-    belongs_to(:sender, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
-    belongs_to(:receiver, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
+    belongs_to(:sender, Digsync.Accounts.User, allow_nil?: false)
+    belongs_to(:receiver, Digsync.Accounts.User, allow_nil?: false)
   end
 
   identities do

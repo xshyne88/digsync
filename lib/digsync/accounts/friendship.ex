@@ -56,8 +56,8 @@ defmodule Digsync.Accounts.Friendship do
   end
 
   relationships do
-    belongs_to(:friend_one, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
-    belongs_to(:friend_two, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
+    belongs_to(:friend_one, Digsync.Accounts.User, allow_nil?: false)
+    belongs_to(:friend_two, Digsync.Accounts.User, allow_nil?: false)
   end
 
   identities do

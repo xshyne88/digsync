@@ -12,34 +12,29 @@
     },
     {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "fragment(\"now()\")",
       "generated?": false,
-      "primary_key?": true,
-      "references": {
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "private_messages_message_id_fkey",
-        "on_delete": null,
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "messages"
-      },
+      "primary_key?": false,
+      "references": null,
       "size": null,
-      "source": "message_id",
-      "type": "uuid"
+      "source": "inserted_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"now()\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "updated_at",
+      "type": "utc_datetime_usec"
     },
     {
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
-      "primary_key?": true,
+      "primary_key?": false,
       "references": {
         "destination_attribute": "id",
         "destination_attribute_default": null,
@@ -49,7 +44,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "private_messages_recipient_id_fkey",
+        "name": "friendships_friend_one_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -57,7 +52,32 @@
         "table": "users"
       },
       "size": null,
-      "source": "recipient_id",
+      "source": "friend_one_id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": {
+        "destination_attribute": "id",
+        "destination_attribute_default": null,
+        "destination_attribute_generated": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "friendships_friend_two_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "primary_key?": true,
+        "schema": "public",
+        "table": "users"
+      },
+      "size": null,
+      "source": "friend_two_id",
       "type": "uuid"
     }
   ],
@@ -66,8 +86,18 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "D3AD973F3371C7B45A4285D506D245CA4FDDA495C6D099A95AF7EA6388CBC5FC",
-  "identities": [],
+  "hash": "94056580D356F73595B2AFC102F88F967DB3121AD33279FB5A17E2CDA4EA721C",
+  "identities": [
+    {
+      "base_filter": null,
+      "index_name": "friendships_unique_friendship_index",
+      "keys": [
+        "friend_one_id",
+        "friend_two_id"
+      ],
+      "name": "unique_friendship"
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -75,5 +105,5 @@
   },
   "repo": "Elixir.Digsync.Repo",
   "schema": null,
-  "table": "private_messages"
+  "table": "friendships"
 }

@@ -1,4 +1,4 @@
-defmodule Digsync.Repo.Migrations.Initial do
+defmodule Digsync.Repo.Migrations.InitialSetup do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 
@@ -44,8 +44,8 @@ defmodule Digsync.Repo.Migrations.Initial do
 
     create table(:private_messages, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
-      add :message_id, :uuid, null: false, primary_key: true
-      add :recipient_id, :uuid, null: false, primary_key: true
+      add :message_id, :uuid, null: false
+      add :recipient_id, :uuid, null: false
     end
 
     create table(:messages, primary_key: false) do
@@ -59,7 +59,6 @@ defmodule Digsync.Repo.Migrations.Initial do
             type: :uuid,
             prefix: "public"
           ),
-          primary_key: true,
           null: false
     end
 
@@ -100,7 +99,6 @@ defmodule Digsync.Repo.Migrations.Initial do
             type: :uuid,
             prefix: "public"
           ),
-          primary_key: true,
           null: false
     end
 
@@ -119,7 +117,6 @@ defmodule Digsync.Repo.Migrations.Initial do
             type: :uuid,
             prefix: "public"
           ),
-          primary_key: true,
           null: false
 
       add :member_id,
@@ -129,9 +126,12 @@ defmodule Digsync.Repo.Migrations.Initial do
             type: :uuid,
             prefix: "public"
           ),
-          primary_key: true,
           null: false
     end
+
+    create unique_index(:group_memberships, [:group_id, :member_id],
+             name: "group_memberships_unique_group_member_index"
+           )
 
     create table(:friendships, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
@@ -145,7 +145,6 @@ defmodule Digsync.Repo.Migrations.Initial do
             type: :uuid,
             prefix: "public"
           ),
-          primary_key: true,
           null: false
 
       add :friend_two_id,
@@ -155,7 +154,6 @@ defmodule Digsync.Repo.Migrations.Initial do
             type: :uuid,
             prefix: "public"
           ),
-          primary_key: true,
           null: false
     end
 
@@ -167,6 +165,7 @@ defmodule Digsync.Repo.Migrations.Initial do
       add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
       add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
       add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add :deleted_at, :utc_datetime_usec, default: fragment("now()")
 
       add :sender_id,
           references(:users,
@@ -175,7 +174,6 @@ defmodule Digsync.Repo.Migrations.Initial do
             type: :uuid,
             prefix: "public"
           ),
-          primary_key: true,
           null: false
 
       add :receiver_id,
@@ -185,7 +183,6 @@ defmodule Digsync.Repo.Migrations.Initial do
             type: :uuid,
             prefix: "public"
           ),
-          primary_key: true,
           null: false
     end
 
@@ -243,6 +240,10 @@ defmodule Digsync.Repo.Migrations.Initial do
     drop constraint(:friendships, "friendships_friend_two_id_fkey")
 
     drop table(:friendships)
+
+    drop_if_exists unique_index(:group_memberships, [:group_id, :member_id],
+                     name: "group_memberships_unique_group_member_index"
+                   )
 
     drop constraint(:group_memberships, "group_memberships_group_id_fkey")
 

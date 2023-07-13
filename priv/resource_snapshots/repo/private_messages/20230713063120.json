@@ -11,20 +11,10 @@
       "type": "uuid"
     },
     {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "text",
-      "type": "text"
-    },
-    {
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
-      "primary_key?": true,
+      "primary_key?": false,
       "references": {
         "destination_attribute": "id",
         "destination_attribute_default": null,
@@ -34,7 +24,32 @@
           "global": null,
           "strategy": null
         },
-        "name": "messages_author_id_fkey",
+        "name": "private_messages_message_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "primary_key?": true,
+        "schema": "public",
+        "table": "messages"
+      },
+      "size": null,
+      "source": "message_id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": {
+        "destination_attribute": "id",
+        "destination_attribute_default": null,
+        "destination_attribute_generated": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "private_messages_recipient_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -42,7 +57,7 @@
         "table": "users"
       },
       "size": null,
-      "source": "author_id",
+      "source": "recipient_id",
       "type": "uuid"
     }
   ],
@@ -51,17 +66,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "DF11DF9F941D21508C20A20223AB2E1666E316BB4ECE6369BCD23F5B7F7C3E88",
-  "identities": [
-    {
-      "base_filter": null,
-      "index_name": "messages_unique_message_id_index",
-      "keys": [
-        "id"
-      ],
-      "name": "unique_message_id"
-    }
-  ],
+  "hash": "D4AE24EE3DBBECA7F6787CECECD84F329AA9C8FD248B46D719620CAD04B2C7FB",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -69,5 +75,5 @@
   },
   "repo": "Elixir.Digsync.Repo",
   "schema": null,
-  "table": "messages"
+  "table": "private_messages"
 }

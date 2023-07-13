@@ -50,7 +50,7 @@ defmodule Digsync.Accounts.Group do
   end
 
   relationships do
-    belongs_to(:creator, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
+    belongs_to(:creator, Digsync.Accounts.User, allow_nil?: false)
 
     many_to_many :group_members, Digsync.Accounts.User do
       through(Digsync.Accounts.GroupMembership)

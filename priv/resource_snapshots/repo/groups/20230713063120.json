@@ -12,6 +12,56 @@
     },
     {
       "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "name",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "description",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "locaton",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "preferred_location",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "\"social\"",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "type",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
       "default": "fragment(\"now()\")",
       "generated?": false,
       "primary_key?": false,
@@ -34,7 +84,7 @@
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
-      "primary_key?": true,
+      "primary_key?": false,
       "references": {
         "destination_attribute": "id",
         "destination_attribute_default": null,
@@ -44,7 +94,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "friendships_friend_one_id_fkey",
+        "name": "groups_creator_id_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -52,32 +102,7 @@
         "table": "users"
       },
       "size": null,
-      "source": "friend_one_id",
-      "type": "uuid"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": true,
-      "references": {
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "friendships_friend_two_id_fkey",
-        "on_delete": null,
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "users"
-      },
-      "size": null,
-      "source": "friend_two_id",
+      "source": "creator_id",
       "type": "uuid"
     }
   ],
@@ -86,16 +111,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "FB6D21280968E085F56365C5447410FEB1EE1B491D1E08E4A28BB8748C93ECD9",
+  "hash": "EEC0438950CC8B14A6D7AD8732BED52060CAD6FB6C972E3158E4CF085C92256F",
   "identities": [
     {
       "base_filter": null,
-      "index_name": "friendships_unique_friendship_index",
+      "index_name": "groups_unique_group_id_index",
       "keys": [
-        "friend_one_id",
-        "friend_two_id"
+        "id"
       ],
-      "name": "unique_friendship"
+      "name": "unique_group_id"
+    },
+    {
+      "base_filter": null,
+      "index_name": "groups_unique_group_name_index",
+      "keys": [
+        "name"
+      ],
+      "name": "unique_group_name"
     }
   ],
   "multitenancy": {
@@ -105,5 +137,5 @@
   },
   "repo": "Elixir.Digsync.Repo",
   "schema": null,
-  "table": "friendships"
+  "table": "groups"
 }

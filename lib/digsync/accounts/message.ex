@@ -24,7 +24,7 @@ defmodule Digsync.Accounts.Message do
   end
 
   relationships do
-    belongs_to(:author, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
+    belongs_to(:author, Digsync.Accounts.User, allow_nil?: false)
   end
 
   identities do

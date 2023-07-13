@@ -44,7 +44,7 @@
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
-      "primary_key?": true,
+      "primary_key?": false,
       "references": {
         "destination_attribute": "id",
         "destination_attribute_default": null,
@@ -69,7 +69,7 @@
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
-      "primary_key?": true,
+      "primary_key?": false,
       "references": {
         "destination_attribute": "id",
         "destination_attribute_default": null,
@@ -96,7 +96,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "06111697AE4CE14471B3CA8A8DA1F7A4CC2CC0B7269C2645DC7C422C5F680351",
+  "hash": "9BECB984D912538A815674158966DD6F2048D8DBDFACFCBECF86EFFA466CC0F1",
   "identities": [
     {
       "base_filter": null,

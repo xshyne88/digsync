@@ -24,24 +24,28 @@ defmodule Digsync.Accounts.GroupMembership do
         allow_nil? false
       end
 
-      # change manage_relationship(:group, type: :append_and_remove)
-      change(fn changeset, %{actor: actor} ->
-        Ash.Changeset.manage_relationship(
-          changeset,
-          :group,
-          %{
-            id: Ash.Type.cast_input(:uuid, "b6937067-651d-4385-8323-20f193f03cd9")Ash.Changeset.get_argument(changeset, :group)
-          },
-          type: :append_and_remove
-        )
-      end)
+      change manage_relationship(:group, type: :append_and_remove)
+      # change(fn changeset, %{actor: actor} ->
+      #   Ash.Changeset.manage_relationship(
+      #     changeset,
+      #     :group,
+      #     %{
+      #       id: Ash.Type.cast_input(:uuid, "b6937067-651d-4385-8323-20f193f03cd9")Ash.Changeset.get_argument(changeset, :group)
+      #     },
+      #     type: :append_and_remove
+      #   )
+      # end)
 
       change relate_actor(:member)
     end
   end
 
   relationships do
-    belongs_to(:group, Digsync.Accounts.Group, primary_key?: true, allow_nil?: false)
-    belongs_to(:member, Digsync.Accounts.User, primary_key?: true, allow_nil?: false)
+    belongs_to(:group, Digsync.Accounts.Group, allow_nil?: false)
+    belongs_to(:member, Digsync.Accounts.User, allow_nil?: false)
+  end
+
+  identities do
+    identity :unique_group_member, [:group_id, :member_id]
   end
 end
