@@ -39,7 +39,7 @@ defmodule Digsync.Accounts.Group do
   actions do
     defaults([:read, :update, :destroy])
 
-    create :actor_create do
+    create :create do
       change relate_actor(:creator)
     end
   end

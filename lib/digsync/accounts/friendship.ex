@@ -39,7 +39,6 @@ defmodule Digsync.Accounts.Friendship do
       end
 
       change(fn changeset, %{actor: actor} = ctx ->
-        # actor is the receiver
         sender = Ash.Changeset.get_argument(changeset, :sender_id)
 
         with {:ok, friend_request} <- FriendRequests.get_by_receiver(actor.id),

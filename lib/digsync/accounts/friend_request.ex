@@ -8,6 +8,10 @@ defmodule Digsync.Accounts.FriendRequest do
     repo(Digsync.Repo)
   end
 
+  resource do
+    base_filter is_nil: :deleted_at
+  end
+
   attributes do
     uuid_primary_key(:id)
 
@@ -37,15 +41,10 @@ defmodule Digsync.Accounts.FriendRequest do
         allow_nil? false
       end
 
-      # filter(expr(receiver_id == arg(:receiver_id)))
       filter(receiver_id: arg(:receiver_id), sender_id: actor(:id))
     end
 
     destroy :friend_request_response do
-      # argument :friend_request_id, :uuid do
-      #   allow_nil? false
-      # end
-
       change set_attribute(:deleted_at, &DateTime.utc_now/0)
       soft? true
     end

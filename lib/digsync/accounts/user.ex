@@ -46,7 +46,7 @@ defmodule Digsync.Accounts.User do
     end
 
     attribute :age, :integer do
-      constraints(min: 18, max: 99)
+      constraints(min: 10, max: 99)
     end
 
     attribute(:bio, :string)
