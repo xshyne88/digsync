@@ -13,7 +13,7 @@ defmodule Digsync.Accounts.FriendRequest do
 
     create_timestamp(:inserted_at, private?: false, allow_nil?: false)
     create_timestamp(:updated_at, private?: false, allow_nil?: false)
-    create_timestamp(:deleted_at, private?: false)
+    create_timestamp(:deleted_at, private?: false, allow_nil?: true)
   end
 
   actions do
@@ -30,10 +30,21 @@ defmodule Digsync.Accounts.FriendRequest do
       change manage_relationship(:receiver, type: :append_and_remove)
     end
 
-    destroy :friend_request_response do
-      argument :friendship_id, :uuid do
+    read :by_receiver do
+      get?(true)
+
+      argument :receiver_id, :uuid do
         allow_nil? false
       end
+
+      # filter(expr(receiver_id == arg(:receiver_id)))
+      filter(receiver_id: arg(:receiver_id), sender_id: actor(:id))
+    end
+
+    destroy :friend_request_response do
+      # argument :friend_request_id, :uuid do
+      #   allow_nil? false
+      # end
 
       change set_attribute(:deleted_at, &DateTime.utc_now/0)
       soft? true

@@ -3,6 +3,8 @@ defmodule Digsync.Accounts.Friendship do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshGraphql.Resource]
 
+  alias Digsync.Accounts.FriendRequests
+
   postgres do
     table("friendships")
     repo(Digsync.Repo)
@@ -29,6 +31,28 @@ defmodule Digsync.Accounts.Friendship do
 
       change manage_relationship(:friend_one, type: :append_and_remove)
       change manage_relationship(:friend_two, type: :append_and_remove)
+    end
+
+    create :accept_friend_request do
+      argument :sender_id, :uuid do
+        allow_nil? false
+      end
+
+      change(fn changeset, %{actor: actor} = ctx ->
+        # actor is the receiver
+        sender = Ash.Changeset.get_argument(changeset, :sender_id)
+
+        with {:ok, friend_request} <- FriendRequests.get_by_receiver(actor.id),
+             {:ok, _destroyed} <- FriendRequests.accepted(friend_request) do
+          type = :append_and_remove
+
+          changeset
+          |> Ash.Changeset.manage_relationship(:friend_one, %{id: sender}, type: type)
+          |> Ash.Changeset.manage_relationship(:friend_two, %{id: actor.id}, type: type)
+        else
+          error -> error
+        end
+      end)
     end
   end
 

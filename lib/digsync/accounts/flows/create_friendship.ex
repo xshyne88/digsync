@@ -21,7 +21,7 @@ defmodule Digsync.Accounts.Flows.CreateFriendship do
               Digsync.Accounts.FriendRequest,
               :friend_request_response do
         input %{
-          friendship_id: path(result(:get_friend_request), [:id])
+          friend_request_id: path(result(:get_friend_request), [:id])
         }
 
         record result(:get_friend_request)
