@@ -4,8 +4,10 @@ alias Digsync.GeoCensus.Client
 alias Digsync.Accounts.User
 alias Digsync.Accounts.Group
 alias Digsync.Accounts.Message
+alias Digsync.Accounts.Messages
 alias Digsync.Accounts.PrivateMessage
 alias Digsync.Accounts.GroupMembership
+alias Digsync.Accounts.GroupMessage
 alias Digsync.Accounts.Token
 alias Digsync.Accounts.Friendship
 alias Digsync.Accounts.FriendRequest
@@ -45,12 +47,6 @@ defmodule Console do
 
     Logger.info("Getting ID for email: #{email}")
     id
-  end
-
-  def l(type) do
-    Group
-    |> Ash.Query.load(type)
-    |> Accounts.read!()
   end
 end
 

@@ -10,11 +10,12 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-user_seeds_path = Path.join([__DIR__, "user_seeds.exs"])
+user_seeds_path = Path.join([__DIR__, "/seeds/user_seeds.exs"])
 Code.require_file(user_seeds_path)
 
 defmodule Seed do
   require Logger
+  require YamlElixir
 
   def start do
     users =
@@ -38,10 +39,10 @@ defmodule Seed do
 
     Logger.info("Created Group: #{group.name}")
 
-    group_membership =
-      Digsync.Accounts.GroupMembership
-      |> Ash.Changeset.for_create(:add_to_group, %{group: group.id}, actor: admin)
-      |> Digsync.Accounts.create!()
+    # group_membership =
+    Digsync.Accounts.GroupMembership
+    |> Ash.Changeset.for_create(:actor_to_group, %{group: group.id}, actor: admin)
+    |> Digsync.Accounts.create!()
 
     Logger.info("Added #{admin.id} to Group: #{group.id}")
 
@@ -53,4 +54,48 @@ defmodule Seed do
   end
 end
 
-Seed.start()
+# defmodule YamlLoader do
+#   require YamlElixir
+
+#   defmacro __using__(opts \\ []) do
+#     path = Keyword.get(opts, :path)
+#     yaml_data = YamlElixir.read_from_file!(path)["en"]["faker"]["family_guy"]
+
+#     module_declaration = generate_module_declaration(yaml_data, __CALLER__.module)
+#     function_declarations = generate_function_declarations(yaml_data)
+
+#     quote do
+#       unquote(module_declaration)
+#       unquote(function_declarations)
+#     end
+#   end
+
+#   defp generate_module_declaration(yaml_data, calling_module) do
+#     module_name = Module.concat(calling_module, :FamilyGuy) |> IO.inspect()
+
+#     quote do
+#       defmodule unquote(module_name) do
+#         unquote(generate_function_declarations(yaml_data))
+#       end
+#     end
+#   end
+
+#   defp generate_function_declarations(yaml_data) do
+#     Enum.map(yaml_data, fn {function_name, values} ->
+#       function_name_atom = String.to_atom(to_string(function_name))
+
+#       quote do
+#         def unquote(function_name_atom)() do
+#           Enum.random(unquote(values))
+#         end
+#       end
+#     end)
+#   end
+# end
+
+# defmodule MyApp do
+#   use YamlLoader, path: "./priv/repo/seeds/family_guy.yml"
+# end
+
+# IO.inspect(MyApp.name())
+# IO.inspect(MyApp.quote())

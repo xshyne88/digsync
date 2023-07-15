@@ -2,6 +2,8 @@ defmodule DigsyncWeb.Router do
   use DigsyncWeb, :router
   use AshAuthentication.Phoenix.Router
 
+  import AshAdmin.Router
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -32,8 +34,11 @@ defmodule DigsyncWeb.Router do
     sign_out_route AuthController
     auth_routes_for Digsync.Accounts.User, to: AuthController
     reset_route []
+  end
 
-    # ash_admin("/admin")
+  scope "/dev" do
+    pipe_through :browser
+    ash_admin("/admin")
   end
 
   scope "/graphql" do

@@ -63,7 +63,8 @@ defmodule Digsync.MixProject do
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:tesla, "~> 1.4"},
-      {:timex, "~> 3.7.11"}
+      {:timex, "~> 3.7.11"},
+      {:yaml_elixir, "~> 2.9.0"}
     ]
   end
 
