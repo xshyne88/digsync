@@ -12,6 +12,9 @@ defmodule Digsync.Accounts.Message do
     uuid_primary_key(:id)
 
     attribute :text, :string
+
+    create_timestamp(:inserted_at, private?: false, allow_nil?: false)
+    create_timestamp(:updated_at, private?: false, allow_nil?: false)
   end
 
   actions do

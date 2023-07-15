@@ -3,6 +3,7 @@ defmodule Digsync.Accounts.PrivateMessage do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshGraphql.Resource]
 
+  alias Digsync.Accounts.Message
   alias Digsync.Accounts.Messages
 
   postgres do
@@ -16,7 +17,7 @@ defmodule Digsync.Accounts.PrivateMessage do
     read :read do
       primary? true
 
-      prepare build(load: :message)
+      prepare build(load: [message: Ash.Query.sort(Message, inserted_at: :desc)])
       filter(expr(recipient_id == ^actor(:id) or message.author_id == ^actor(:id)))
     end
 

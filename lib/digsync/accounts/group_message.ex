@@ -72,6 +72,9 @@ defmodule Digsync.Accounts.GroupMessage do
 
   attributes do
     uuid_primary_key(:id)
+
+    create_timestamp(:inserted_at, private?: false, allow_nil?: false)
+    create_timestamp(:updated_at, private?: false, allow_nil?: false)
   end
 
   relationships do
