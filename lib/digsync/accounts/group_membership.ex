@@ -17,9 +17,11 @@ defmodule Digsync.Accounts.GroupMembership do
   end
 
   actions do
-    defaults([:create, :read, :update, :destroy])
+    defaults([:read, :update, :destroy])
 
-    create :actor_to_group do
+    create :create do
+      primary? true
+
       argument :group, :uuid do
         allow_nil? false
       end

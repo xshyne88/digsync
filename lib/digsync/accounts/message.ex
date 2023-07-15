@@ -17,6 +17,14 @@ defmodule Digsync.Accounts.Message do
   actions do
     defaults [:read, :update, :destroy]
 
+    read :read_by_author do
+      argument :author_id, :uuid do
+        allow_nil? false
+      end
+
+      filter(expr(author_id == arg(:author_id)))
+    end
+
     create :create do
       primary? true
       change relate_actor(:author)

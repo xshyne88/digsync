@@ -38,19 +38,21 @@ defmodule Digsync.Accounts.Friendship do
         allow_nil? false
       end
 
-      change(fn changeset, %{actor: actor} = ctx ->
-        sender = Ash.Changeset.get_argument(changeset, :sender_id)
+      change(fn changeset, %{actor: actor} ->
+        Ash.Changeset.before_action(changeset, fn changeset ->
+          sender = Ash.Changeset.get_argument(changeset, :sender_id)
 
-        with {:ok, friend_request} <- FriendRequests.get_by_receiver(actor.id),
-             {:ok, _destroyed} <- FriendRequests.accepted(friend_request) do
-          type = :append_and_remove
+          with {:ok, friend_request} <- FriendRequests.get_by_receiver(actor.id),
+               {:ok, _destroyed} <- FriendRequests.accepted(friend_request) do
+            type = :append_and_remove
 
-          changeset
-          |> Ash.Changeset.manage_relationship(:friend_one, %{id: sender}, type: type)
-          |> Ash.Changeset.manage_relationship(:friend_two, %{id: actor.id}, type: type)
-        else
-          error -> error
-        end
+            changeset
+            |> Ash.Changeset.manage_relationship(:friend_one, %{id: sender}, type: type)
+            |> Ash.Changeset.manage_relationship(:friend_two, %{id: actor.id}, type: type)
+          else
+            error -> error
+          end
+        end)
       end)
     end
   end

@@ -36,8 +36,9 @@ defmodule Digsync.Accounts.GroupMessage do
           fn changeset ->
             text = Ash.Changeset.get_argument(changeset, :message_text)
 
-            text
-            |> Messages.create_default(actor)
+            %{}
+            |> Map.put(:text, text)
+            |> Messages.create(actor: actor)
             |> case do
               {:ok, message} ->
                 Ash.Changeset.manage_relationship(changeset, :message, message.id,
