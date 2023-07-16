@@ -34,14 +34,14 @@ defmodule Digsync.Accounts.FriendRequest do
       change manage_relationship(:receiver, type: :append_and_remove)
     end
 
-    read :by_receiver do
+    read :by_sender do
       get?(true)
 
-      argument :receiver_id, :uuid do
+      argument :sender, :uuid do
         allow_nil? false
       end
 
-      filter(receiver_id: arg(:receiver_id), sender_id: actor(:id))
+      filter(receiver_id: actor(:id), sender_id: arg(:sender))
     end
 
     destroy :friend_request_response do

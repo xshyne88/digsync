@@ -6,7 +6,7 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :digsync, Digsync.Repo,
-  username: "postgres",
+  username: "chase",
   password: "postgres",
   hostname: "localhost",
   database: "digsync_test#{System.get_env("MIX_TEST_PARTITION")}",
@@ -22,6 +22,12 @@ config :digsync, DigsyncWeb.Endpoint,
 
 # In test we don't send emails.
 config :digsync, Digsync.Mailer, adapter: Swoosh.Adapters.Test
+
+# we don't need ash to spawn tasks during tests
+config :ash, :disable_async?, true
+
+# notifiers run in some transactions and its mostly not necessary in tests.
+config :ash, :missed_notifications, :ignore
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false

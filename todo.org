@@ -1,0 +1,18 @@
+* ctrl + enter Org Tutorial Follow
+[[link][www.github.com/xshyne88]]
+** there are things here 
+#+begin_src elixir
+  defmodule HiMom do
+    def things(), do: 5
+  end
+
+#+end_src
+** Tables
+  | Col 1   | Col 2   | Col 3   |
+  | ----- + | ------+ | ----+   |
+  | Thing   | not     | another |
+  |         |         |         |
+
+** Tasks
+*** TODO base filtering for friend requests deleted at
+*** TODO graphql hookup for code interfaces

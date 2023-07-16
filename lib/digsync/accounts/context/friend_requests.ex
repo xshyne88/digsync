@@ -4,9 +4,9 @@ defmodule Digsync.Accounts.FriendRequests do
 
   require Ash.Query
 
-  def get_by_receiver(receiver_id) do
+  def get_by_sender(sender) do
     FriendRequest
-    |> Ash.Query.for_read(:by_receiver, %{receiver_id: receiver_id})
+    |> Ash.Query.for_read(:by_sender, %{sender: sender})
     |> Accounts.read_one()
   end
 

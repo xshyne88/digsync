@@ -11,7 +11,7 @@ defmodule Digsync.Accounts.GroupMessage do
   end
 
   actions do
-    defaults [:create, :update, :destroy]
+    defaults [:update, :destroy]
 
     read :read do
       primary? true
@@ -19,7 +19,7 @@ defmodule Digsync.Accounts.GroupMessage do
       prepare build(load: :message)
     end
 
-    create :create_from_scratch do
+    create :create do
       touches_resources [Digsync.Accounts.Message]
 
       argument :group, :uuid do

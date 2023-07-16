@@ -34,16 +34,16 @@ defmodule Digsync.Accounts.Friendship do
     end
 
     create :accept_friend_request do
-      argument :sender_id, :uuid do
+      argument :sender, :uuid do
         allow_nil? false
       end
 
       change(fn changeset, %{actor: actor} ->
         Ash.Changeset.before_action(changeset, fn changeset ->
-          sender = Ash.Changeset.get_argument(changeset, :sender_id)
+          sender = Ash.Changeset.get_argument(changeset, :sender)
 
-          with {:ok, friend_request} <- FriendRequests.get_by_receiver(actor.id),
-               {:ok, _destroyed} <- FriendRequests.accepted(friend_request) do
+          with {:ok, friend_request} <- FriendRequests.get_by_sender(sender) |> IO.inspect(),
+               {:ok, _destroyed} <- FriendRequests.accepted(friend_request) |> IO.inspect() do
             type = :append_and_remove
 
             changeset
