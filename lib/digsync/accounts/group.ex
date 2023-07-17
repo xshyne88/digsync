@@ -45,6 +45,7 @@ defmodule Digsync.Accounts.Group do
     defaults([:read, :update, :destroy])
 
     create :create do
+      change relate_actor(:group_admin)
       change relate_actor(:creator)
     end
   end
@@ -56,7 +57,6 @@ defmodule Digsync.Accounts.Group do
 
   relationships do
     belongs_to(:creator, Digsync.Accounts.User, allow_nil?: false)
-    belongs_to(:group_admin, Digsync.Accounts.User, allow_nil?: true)
 
     many_to_many :group_members, Digsync.Accounts.User do
       through(Digsync.Accounts.GroupMembership)

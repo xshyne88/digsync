@@ -12,7 +12,8 @@ defmodule Digsync.Accounts.GroupMembership do
     uuid_primary_key(:id)
 
     attribute :group_type, :atom do
-      constraints(one_of: [:leader, :member])
+      default :member
+      constraints(one_of: [:admin, :member])
     end
   end
 
