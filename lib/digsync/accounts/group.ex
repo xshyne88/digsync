@@ -23,6 +23,11 @@ defmodule Digsync.Accounts.Group do
       allow_nil? false
     end
 
+    attribute :invite_only?, :boolean do
+      default false
+      allow_nil? false
+    end
+
     attribute :locaton, :string
 
     attribute :preferred_location, :string
@@ -51,6 +56,7 @@ defmodule Digsync.Accounts.Group do
 
   relationships do
     belongs_to(:creator, Digsync.Accounts.User, allow_nil?: false)
+    belongs_to(:group_admin, Digsync.Accounts.User, allow_nil?: true)
 
     many_to_many :group_members, Digsync.Accounts.User do
       through(Digsync.Accounts.GroupMembership)

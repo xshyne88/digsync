@@ -21,9 +21,9 @@ defmodule Digsync.Accounts.FriendRequest do
   end
 
   actions do
-    defaults([:create, :read, :update])
+    defaults([:read, :update])
 
-    create :send_friendship_request do
+    create :create do
       accept []
 
       argument :receiver, :uuid do

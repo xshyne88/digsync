@@ -18,11 +18,19 @@ defmodule Digsync.DataCase do
 
   using do
     quote do
+      # apis
+      alias Digsync.Accounts
+      alias Digsync.Planning
+
+      # repo
       alias Digsync.Repo
 
+      # ecto helpers
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
+
+      # test setups below
       import Digsync.DataCase
     end
   end

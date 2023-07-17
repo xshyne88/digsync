@@ -62,6 +62,13 @@ defmodule Digsync.Accounts.User do
   actions do
     defaults([:read, :create, :update, :destroy])
 
+    create :example do
+      argument :email, :string do
+      end
+
+      change set_attribute(:email, arg(:email))
+    end
+
     read :current_user do
       get?(true)
 
@@ -95,18 +102,7 @@ defmodule Digsync.Accounts.User do
       list(:list_users, :read)
     end
 
-    mutations do
-      # TODO: only expose certain things
-      create(:create_user, :create)
-      # update(:update_user, :update)
-      # update(:send_friendship_request, :update)
-
-      # destroy(:destroy_user, :destroy)
-    end
-
-    # TODO: add relationship mutations
-    # managed_relationships do
-    #   managed_relationship(:send_friendship_request, :friendships)
+    # mutations do
     # end
   end
 

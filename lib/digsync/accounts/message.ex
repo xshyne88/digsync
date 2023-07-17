@@ -11,7 +11,9 @@ defmodule Digsync.Accounts.Message do
   attributes do
     uuid_primary_key(:id)
 
-    attribute :text, :string
+    attribute :text, :string do
+      constraints allow_empty?: false
+    end
 
     create_timestamp(:inserted_at, private?: false, allow_nil?: false)
     create_timestamp(:updated_at, private?: false, allow_nil?: false)
@@ -29,6 +31,7 @@ defmodule Digsync.Accounts.Message do
     end
 
     create :create do
+      accept([:text, :inserted_at])
       primary? true
       change relate_actor(:author)
     end
