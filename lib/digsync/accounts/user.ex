@@ -63,6 +63,14 @@ defmodule Digsync.Accounts.User do
   actions do
     defaults([:read, :create, :update, :destroy])
 
+    read :by_first_and_last do
+      get_by [:first_name, :last_name]
+    end
+
+    read :by_first do
+      get_by [:first_name]
+    end
+
     create :example do
       argument :email, :string do
       end

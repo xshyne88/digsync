@@ -12,29 +12,31 @@ defmodule Digsync.Accounts.Group do
     uuid_primary_key(:id)
 
     attribute :name, :string do
-      allow_nil? false
+      allow_nil?(false)
 
-      constraints min_length: 3,
-                  trim?: true,
-                  allow_empty?: false
+      constraints(
+        min_length: 3,
+        trim?: true,
+        allow_empty?: false
+      )
     end
 
     attribute :description, :string do
-      allow_nil? false
+      allow_nil?(false)
     end
 
     attribute :invite_only?, :boolean do
-      default false
-      allow_nil? false
+      default(false)
+      allow_nil?(false)
     end
 
-    attribute :locaton, :string
+    attribute(:locaton, :string)
 
-    attribute :preferred_location, :string
+    attribute(:preferred_location, :string)
 
     attribute :type, :atom do
-      default :social
-      constraints one_of: [:club, :bar, :social]
+      default(:social)
+      constraints(one_of: [:club, :bar, :social])
     end
 
     create_timestamp(:inserted_at, private?: false, allow_nil?: false)
@@ -45,8 +47,8 @@ defmodule Digsync.Accounts.Group do
     defaults([:read, :update, :destroy])
 
     create :create do
-      change relate_actor(:group_admin)
-      change relate_actor(:creator)
+      change(relate_actor(:group_admin))
+      change(relate_actor(:creator))
     end
   end
 
@@ -57,12 +59,11 @@ defmodule Digsync.Accounts.Group do
 
   relationships do
     belongs_to(:creator, Digsync.Accounts.User, allow_nil?: false)
+    belongs_to(:group_admin, Digsync.Accounts.User, allow_nil?: true)
 
     many_to_many :group_members, Digsync.Accounts.User do
       through(Digsync.Accounts.GroupMembership)
-      # resolves to User
       destination_attribute_on_join_resource(:member_id)
-      # resolves to Group
       source_attribute_on_join_resource(:group_id)
     end
   end

@@ -7,6 +7,7 @@ alias Digsync.Accounts.Message
 alias Digsync.Accounts.Messages
 alias Digsync.Accounts.PrivateMessage
 alias Digsync.Accounts.GroupMembership
+alias Digsync.Accounts.GroupRequest
 alias Digsync.Accounts.GroupMessage
 alias Digsync.Accounts.Token
 alias Digsync.Accounts.Friendship
@@ -49,5 +50,34 @@ defmodule Console do
     id
   end
 end
+
+defmodule D do
+  def get_user(first_name) do
+    User
+    |> Ash.Query.for_read(:by_first, %{first_name: first_name})
+    |> Accounts.read_one!()
+  end
+
+  def groups() do
+    Group
+    |> Ash.Query.for_read(:read)
+    |> Accounts.read!()
+  end
+
+  def group_ids() do
+    groups() |> Enum.map(&[&1.id, &1.name])
+  end
+
+  def group_request() do
+  end
+end
+
+require Digsync.FamilyGuy
+
+Digsync.FamilyGuy.create_variables()
+
+# peter = D.get_user("Peter")
+# lois = D.get_user("Lois")
+# stewie = D.get_user("Stewie")
 
 Console.set_actor()

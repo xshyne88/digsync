@@ -3,6 +3,10 @@ defmodule Digsync.Accounts.GroupRequest do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshGraphql.Resource]
 
+  # authorizers: [Ash.Policy.Authorizer]
+
+  # alias Digsync.Accounts.Policies.IsGroupAdmin
+
   postgres do
     table("group_requests")
     repo(Digsync.Repo)
@@ -17,31 +21,39 @@ defmodule Digsync.Accounts.GroupRequest do
   end
 
   actions do
-    defaults([:read, :update, :destroy])
+    defaults([:update, :destroy])
+
+    read :read do
+      argument :group, :uuid do
+        allow_nil?(false)
+      end
+
+      filter(expr(group.group_admin_id == ^actor(:id)))
+    end
 
     read :get_by_requester_and_group do
-      get? true
+      get?(true)
 
       argument :group, :uuid do
-        allow_nil? false
+        allow_nil?(false)
       end
 
       argument :requester, :uuid do
-        allow_nil? false
+        allow_nil?(false)
       end
 
       filter(requester_id: arg(:requester), group_id: arg(:group))
     end
 
     create :create do
-      accept []
+      accept([])
 
       argument :group, :uuid do
-        allow_nil? false
+        allow_nil?(false)
       end
 
-      change relate_actor(:requester)
-      change manage_relationship(:group, type: :append_and_remove)
+      change(relate_actor(:requester))
+      change(manage_relationship(:group, type: :append_and_remove))
     end
   end
 
@@ -56,7 +68,18 @@ defmodule Digsync.Accounts.GroupRequest do
   #   define :group_by_member
   # end
 
+  # policies do
+  #   policy action(:create) do
+  #     authorize_if always()
+  #   end
+
+  #   policy action(:read) do
+  #     authorize_if(relates_to_actor_via(:requester))
+  #     authorize_if(relates_to_actor_via([:group, :group_admin]))
+  #   end
+  # end
+
   identities do
-    identity :unique_group_request, [:group_id, :requester_id]
+    identity(:unique_group_request, [:group_id, :requester_id])
   end
 end

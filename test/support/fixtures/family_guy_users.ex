@@ -1,4 +1,6 @@
 defmodule Digsync.FamilyGuy do
+  require Ash.Query
+
   @names [
     "Barbara Pewterschmidt",
     "Bonnie Swanson",
@@ -11,7 +13,7 @@ defmodule Digsync.FamilyGuy do
     "Joe Swanson",
     "Joyce Kinney",
     "Lois Griffin",
-    "Mayor Adam West",
+    "MayorAdam West",
     "Meg Griffin",
     "Mickey McFinnigan",
     "Mort Goldman",
@@ -36,6 +38,28 @@ defmodule Digsync.FamilyGuy do
         {String.to_atom(k), v}
     end)
     |> Map.new()
+  end
+
+  def get_user(first_name) do
+    Digsync.Accounts.User
+    |> Ash.Query.for_read(:by_first, %{first_name: first_name})
+    |> Digsync.Accounts.read_one!()
+  end
+
+  defmacro create_variables() do
+    assignments =
+      Enum.map(@names, fn name ->
+        [first_name | _] = String.split(name, " ")
+        var_name = Macro.var(String.to_atom(String.downcase(first_name)), nil)
+
+        quote do
+          unquote(var_name) = apply(&Digsync.FamilyGuy.get_user/1, [unquote(first_name)])
+        end
+      end)
+
+    quote do
+      (unquote_splicing(assignments))
+    end
   end
 
   def string_data do
@@ -279,7 +303,7 @@ defmodule Digsync.FamilyGuy do
         "first_name" => "Principal",
         "last_name" => "Shepherd"
       },
-      "Mayor Adam West" => %{
+      "MayorAdam West" => %{
         "email" => "adam@quahogcityhall.com",
         "facebook_link" => "adamwest@facebook.com",
         "instagram_link" => "awest@instagram.com",

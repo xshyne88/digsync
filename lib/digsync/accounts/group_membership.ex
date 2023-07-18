@@ -1,7 +1,10 @@
 defmodule Digsync.Accounts.GroupMembership do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshGraphql.Resource]
+    extensions: [AshGraphql.Resource],
+    authorizers: [Ash.Policy.Authorizer]
+
+  alias Digsync.Accounts.Policies.IsGroupAdmin
 
   postgres do
     table("group_memberships")
@@ -29,6 +32,12 @@ defmodule Digsync.Accounts.GroupMembership do
 
       change manage_relationship(:group, type: :append_and_remove)
       change relate_actor(:member)
+    end
+  end
+
+  policies do
+    policy action_type(:create) do
+      authorize_if relates_to_actor_via([:group, :group_admin])
     end
   end
 
