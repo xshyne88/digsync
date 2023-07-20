@@ -30,6 +30,29 @@ defmodule Digsync.Accounts.GroupMembership do
         allow_nil? false
       end
 
+      argument :member, :uuid do
+        allow_nil? false
+      end
+
+      # change(fn changeset, %{actor: actor} ->
+      #   Ash.Changeset.before_action(changeset, fn changeset ->
+      #     member = Ash.Changeset.get_argument(changeset, :member)
+      #     group = Ash.Changeset.get_argument(changeset, :group)
+
+      #     with {:ok, friend_request} <-
+      #            Accounts.group_request_by_member(%{member: member, group: group}),
+      #          {:ok, _destroyed} <- FriendRequests.accepted(friend_request) do
+      #       type = :append_and_remove
+
+      #       changeset
+      #       |> Ash.Changeset.manage_relationship(:friend_one, %{id: sender}, type: type)
+      #       |> Ash.Changeset.manage_relationship(:friend_two, %{id: actor.id}, type: type)
+      #     else
+      #       error -> error
+      #     end
+      #   end)
+      # end)
+
       change manage_relationship(:group, type: :append_and_remove)
       change relate_actor(:member)
     end
@@ -38,46 +61,13 @@ defmodule Digsync.Accounts.GroupMembership do
   policies do
     policy action_type(:create) do
       authorize_if IsGroupadmin
-      # * Cannot use a filter to authorize a create.
+    end
 
-      # If you are using Ash.Policy.Authorizer:
-
-      # Many expressions, like those that reference relationships, require using custom checks for create actions.
-
-      # Expressions that only reference the actor or context, for example `expr(^actor(:is_admin) == true)` will work
-      # because those are evaluated without needing to reference data.
-
-      # For create actions, there is no data yet. In the future we may support referencing simple attributes and those
-      # references will be referring to the values of the data about to be created, but at this time we do not.
-
-      #   Given a policy like:
-
-      #   ```elixir
-      #   policy expr(special == true) do
-      #     authorize_if expr(allows_special == true)
-      #   end
-      #   ```
-
-      #   You would rewrite it to not include create actions like so:
-
-      #   ```elixir
-      #   policy [expr(special == true), action_type([:read, :update, :destroy])] do
-      #     authorize_if expr(allows_special == true)
-      #   end
-      #   ```
-
-      #   At which point you could add a `create` specific policy:
-
-      #   ```elixir
-      #   policy [changing_attributes(special: [to: true]), action_type(:create)] do
-      #     authorize_if changing_attributes(special: [to: true])
-      #   end
-      #   ```
-
-      #   In these cases, you may also end up wanting to write a custom check.
-
-      # authorize_if relates_to_actor_via([:group, :group_admin])
-      # authorize_if expr()
+    policy action(:read) do
+      authorize_if expr(
+                     group.group_admin_id == ^actor(:id) or requester_id == ^actor(:id) or
+                       group_type == :admin
+                   )
     end
   end
 

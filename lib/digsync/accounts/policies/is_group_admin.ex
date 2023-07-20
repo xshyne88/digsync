@@ -11,12 +11,14 @@ defmodule Digsync.Accounts.Policies.IsGroupAdmin do
 
   def match?(actor, %{resource: GroupRequest, changeset: changeset}, _opts) do
     group = get_group(changeset)
+    IO.inspect(actor, label: "actor")
 
     group.group_admin_id == actor.id
   end
 
   def match?(actor, %{resource: GroupMembership, changeset: changeset}, _opts) do
     group = get_group(changeset)
+    IO.inspect(actor, label: "actor")
 
     group.group_admin_id == actor.id
   end

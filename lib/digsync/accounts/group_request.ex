@@ -28,18 +28,16 @@ defmodule Digsync.Accounts.GroupRequest do
       end
     end
 
-    read :get_by_requester_and_group do
-      get?(true)
-
+    read :by_requester do
       argument :group, :uuid do
-        allow_nil?(false)
+        allow_nil? false
       end
 
       argument :requester, :uuid do
-        allow_nil?(false)
+        allow_nil? false
       end
 
-      filter(requester_id: arg(:requester), group_id: arg(:group))
+      filter(expr(requester_id == ^arg(:requester) and group_id == ^arg(:group)))
     end
 
     create :create do
@@ -59,22 +57,20 @@ defmodule Digsync.Accounts.GroupRequest do
     belongs_to(:requester, Digsync.Accounts.User, allow_nil?: false)
   end
 
-  # code_interface do
-  #   define_for Digsync.Accounts
-
-  #   define :group_by_member
-  # end
-
   policies do
     policy action(:create) do
       authorize_if IsGroupAdmin
     end
 
-    # policy actoin
-
     policy action(:read) do
       authorize_if expr(group.group_admin_id == ^actor(:id) or requester_id == ^actor(:id))
     end
+  end
+
+  code_interface do
+    define_for Digsync.Accounts
+
+    define :by_requester, args: [:requester, :group]
   end
 
   identities do

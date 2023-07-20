@@ -34,6 +34,8 @@ defmodule Digsync.Accounts.Friendship do
     end
 
     create :accept_friend_request do
+      touches_resources [:friend_request]
+
       argument :sender, :uuid do
         allow_nil? false
       end
@@ -42,8 +44,8 @@ defmodule Digsync.Accounts.Friendship do
         Ash.Changeset.before_action(changeset, fn changeset ->
           sender = Ash.Changeset.get_argument(changeset, :sender)
 
-          with {:ok, friend_request} <- FriendRequests.get_by_sender(sender) |> IO.inspect(),
-               {:ok, _destroyed} <- FriendRequests.accepted(friend_request) |> IO.inspect() do
+          with {:ok, friend_request} <- FriendRequests.get_by_sender(sender),
+               {:ok, _destroyed} <- FriendRequests.accepted(friend_request) do
             type = :append_and_remove
 
             changeset
