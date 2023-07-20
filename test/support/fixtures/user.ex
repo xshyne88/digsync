@@ -1,5 +1,5 @@
-defmodule Digsync.UserFixtures do
-  import Digsync.UserFixtures.Helpers
+defmodule Digsync.Fixtures.User do
+  import Digsync.Fixtures.User.Helpers
 
   alias Digsync.Accounts
   alias Digsync.Accounts.User

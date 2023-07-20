@@ -69,15 +69,20 @@ defmodule D do
   end
 
   def group_request() do
+    GroupRequest |> Accounts.read!(actor: Ash.get_actor())
+  end
+
+  def group_request(actor) do
+    group = Group |> Accounts.read_one!()
+
+    GroupRequest
+    |> Ash.Query.for_read(:read, %{group: group.id}, actor: actor)
+    |> Accounts.read!()
   end
 end
 
 require Digsync.FamilyGuy
 
 Digsync.FamilyGuy.create_variables()
-
-# peter = D.get_user("Peter")
-# lois = D.get_user("Lois")
-# stewie = D.get_user("Stewie")
 
 Console.set_actor()

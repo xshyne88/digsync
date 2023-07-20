@@ -1,6 +1,6 @@
 defmodule Digsync.Accounts.FriendRequestTest do
   use Digsync.DataCase
-  import Digsync.UserFixtures
+  import Digsync.Fixtures.User
 
   alias Digsync.Accounts
   alias Digsync.Accounts.FriendRequest
@@ -14,7 +14,6 @@ defmodule Digsync.Accounts.FriendRequestTest do
         FriendRequest
         |> Ash.Changeset.for_create(:create, %{receiver: user2.id}, actor: user1)
         |> Accounts.create!()
-        |> IO.inspect()
 
       assert fr.receiver_id == user2.id
       assert fr.sender_id == user1.id
