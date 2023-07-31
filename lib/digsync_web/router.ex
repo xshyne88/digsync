@@ -4,6 +4,8 @@ defmodule DigsyncWeb.Router do
 
   import AshAdmin.Router
 
+  # * Read up plugs + macros
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -25,6 +27,7 @@ defmodule DigsyncWeb.Router do
     plug DigsyncWeb.Plugs.SetActor
     plug AshGraphql.Plug
   end
+  # Create scope for diff route
 
   scope "/", DigsyncWeb do
     pipe_through :browser
