@@ -21,7 +21,19 @@ defmodule Digsync.Accounts.GroupMembership do
   end
 
   actions do
-    defaults([:read, :update, :destroy])
+    defaults([:update, :destroy])
+
+    read :read do
+      filter(expr(^actor(:id) == member_id or group_type == :admin))
+    end
+
+    # read :by_group do
+    #   argument :group, :uuid do
+    #     allow_nil? false
+    #   end
+
+    #   filter expr()
+    # end
 
     create :create do
       primary? true
@@ -33,6 +45,14 @@ defmodule Digsync.Accounts.GroupMembership do
       argument :member, :uuid do
         allow_nil? false
       end
+
+      # TODO:
+      # we need to first take in the group_request id, which will be present on the frontend
+      # we could also create an action that takes in a group and member
+      # we need to validate that the actor is a group admin
+      # we need to check the membership of the actor to see if they are an admin type
+      # we need to lookup the group request and soft delete it.
+      # we then need to relate the member and group from the group request
 
       # change(fn changeset, %{actor: actor} ->
       #   Ash.Changeset.before_action(changeset, fn changeset ->
@@ -60,12 +80,12 @@ defmodule Digsync.Accounts.GroupMembership do
 
   policies do
     policy action_type(:create) do
-      authorize_if IsGroupadmin
+      authorize_if IsGroupAdmin
     end
 
     policy action(:read) do
       authorize_if expr(
-                     group.group_admin_id == ^actor(:id) or requester_id == ^actor(:id) or
+                     group.group_admin_id == ^actor(:id) or member_id == ^actor(:id) or
                        group_type == :admin
                    )
     end

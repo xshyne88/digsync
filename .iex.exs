@@ -79,10 +79,19 @@ defmodule D do
     |> Ash.Query.for_read(:read, %{group: group.id}, actor: actor)
     |> Accounts.read!()
   end
+
+  def create_griffins_request(requester, group) do
+    GroupRequest
+    |> Ash.Changeset.for_create(:create, %{group: group}, actor: requester)
+    |> Accounts.create!()
+  end
 end
 
+# we are requring a macro here to do variable assignment
 require Digsync.FamilyGuy
 
+# creates peter, stewie, lois for example as variables
+# to be used in iex for testing.
 Digsync.FamilyGuy.create_variables()
 
 Console.set_actor()

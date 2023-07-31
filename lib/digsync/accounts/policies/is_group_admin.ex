@@ -4,6 +4,7 @@ defmodule Digsync.Accounts.Policies.IsGroupAdmin do
   alias Digsync.Accounts
   alias Digsync.Accounts.Group
   alias Digsync.Accounts.GroupRequest
+  alias Digsync.Accounts.GroupMembership
 
   def describe(_) do
     "Check to see if the actor is a group admin"
@@ -18,12 +19,13 @@ defmodule Digsync.Accounts.Policies.IsGroupAdmin do
 
   def match?(actor, %{resource: GroupMembership, changeset: changeset}, _opts) do
     group = get_group(changeset)
-    IO.inspect(actor, label: "actor")
 
     group.group_admin_id == actor.id
   end
 
-  def match?(_, _, _), do: false
+  def match?(actor, params, opts) do
+    false
+  end
 
   defp get_group(changeset) do
     changeset
