@@ -33,7 +33,6 @@ defmodule DigsyncWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    # get "/users", UserController, :get_users
     live "/users", UsersLive
     sign_in_route()
     sign_out_route AuthController
