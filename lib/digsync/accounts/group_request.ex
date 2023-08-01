@@ -29,8 +29,11 @@ defmodule Digsync.Accounts.GroupRequest do
       filter(expr(group.group_admin_id == ^actor(:id) or requester.id == ^actor(:id)))
     end
 
-    read :get do
-      get? true
+    read :all do
+    end
+
+    read :by_id do
+      get_by :id
     end
 
     create :create do
@@ -42,6 +45,11 @@ defmodule Digsync.Accounts.GroupRequest do
 
       change(relate_actor(:requester))
       change(manage_relationship(:group, type: :append_and_remove))
+    end
+
+    destroy :soft do
+      change set_attribute(:deleted_at, &DateTime.utc_now/0)
+      soft? true
     end
   end
 

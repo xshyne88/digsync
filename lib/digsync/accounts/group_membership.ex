@@ -5,6 +5,7 @@ defmodule Digsync.Accounts.GroupMembership do
     authorizers: [Ash.Policy.Authorizer]
 
   alias Digsync.Accounts.Policies.IsGroupAdmin
+  alias Digsync.Accounts.GroupRequests
 
   postgres do
     table("group_memberships")
@@ -34,35 +35,24 @@ defmodule Digsync.Accounts.GroupMembership do
         allow_nil? false
       end
 
-      # TODO:
-      # we need to first take in the group_request id, which will be present on the frontend
-      # we could also create an action that takes in a group and member
-      # we need to validate that the actor is a group admin
-      # we need to check the membership of the actor to see if they are an admin type
-      # we need to lookup the group request and soft delete it.
-      # we then need to relate the member and group from the group request
-
       change(fn changeset, %{actor: actor} ->
         Ash.Changeset.before_action(changeset, fn changeset ->
-          changeset
-          |> Ash.Changeset.get_argument(:group_request)
-          |> Accounts.read!()
+          group_request_id = Ash.Changeset.get_argument(changeset, :group_request)
 
-          with {:ok, group_request} <-
-                 {:ok, _destroyed} <- FriendRequests.accepted(friend_request) do
+          with {:ok, group_request} <- GroupRequests.get(group_request_id),
+               {:ok, _destroyed} <- GroupRequests.accepted(group_request) do
             type = :append_and_remove
 
             changeset
-            |> Ash.Changeset.manage_relationship(:friend_one, %{id: sender}, type: type)
-            |> Ash.Changeset.manage_relationship(:friend_two, %{id: actor.id}, type: type)
+            |> Ash.Changeset.manage_relationship(:member, %{id: group_request.requester.id},
+              type: type
+            )
+            |> Ash.Changeset.manage_relationship(:group, %{id: group_request.group.id}, type: type)
           else
             error -> error
           end
         end)
       end)
-
-      change manage_relationship(:group, type: :append_and_remove)
-      change relate_actor(:member)
     end
   end
 
