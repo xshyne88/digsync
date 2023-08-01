@@ -1,0 +1,28 @@
+<!-- lib/digsync_web/live/users_live.html.heex -->
+<div class="container mx-auto px-4">
+  <h1 class="text-2xl font-bold my-4">User List</h1>
+  <div x-data="{ sortOrder: 'asc' }">
+    <!-- Add the sorting button -->
+    <button
+      class="bg-blue-500 text-white px-4 py-2 rounded-lg"
+      @click="sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'"
+    >
+      Sort by Name
+    </button>
+    <div>
+      <%= for user <- Enum.sort_by(@users, &(&1.first_name), :asc) do %>
+      <div class="user-card bg-blue-200 p-4 my-4">
+        <h2 class="text-2xl font-bold text-blue-600">
+          <%= "#{user.first_name} #{user.last_name}" %>
+        </h2>
+        <ul>
+          <%= for {key, value} <- Map.to_list(Map.from_struct(user)) do %> <%=
+          if !is_map(value) do %>
+          <li><%= key %>: <%= to_string(value) %></li>
+          <% end %> <% end %>
+        </ul>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
