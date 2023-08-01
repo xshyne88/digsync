@@ -5,7 +5,6 @@ defmodule UserSeed do
   alias Digsync.Accounts.GroupMembership
   alias Digsync.Accounts.GroupRequest
   alias Digsync.FamilyGuy
-  # alias Digsync.Fixtures.User
 
   import Digsync.Fixtures.User, only: [build_user: 2]
 
@@ -37,21 +36,11 @@ defmodule UserSeed do
       )
       |> Accounts.create!()
 
-    # GroupRequest
-    # |> Ash.Changeset.for_create(:create, %{group: griffins.id}, actor: stewie)
-    # |> Accounts.create()
-    # |> case do
-    #   {:ok, result} ->
-    #     IO.inspect(result)
+    developer_users()
 
-    #   {:error, error} ->
-    #     IO.inspect(error)
-
-    #     Enum.map(error.errors, fn err ->
-    #       IO.inspect(Ash.Error.Forbidden.Policy.report(err, help_text?: true))
-    #     end)
-    # end
-    # |> IO.inspect(label: "result")
+    GroupRequest
+    |> Ash.Changeset.for_create(:create, %{group: griffins.id}, actor: stewie)
+    |> Accounts.create!()
   end
 
   def developer_users do
