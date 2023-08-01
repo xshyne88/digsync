@@ -1,10 +1,7 @@
 defmodule Digsync.Accounts.GroupRequest do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshGraphql.Resource],
-    authorizers: [Ash.Policy.Authorizer]
-
-  alias Digsync.Accounts.Policies.IsGroupAdmin
+    extensions: [AshGraphql.Resource]
 
   postgres do
     table("group_requests")
@@ -23,21 +20,17 @@ defmodule Digsync.Accounts.GroupRequest do
     defaults([:update, :destroy])
 
     read :read do
+      primary? true
+
       argument :group, :uuid do
         allow_nil?(false)
       end
+
+      filter(expr(group.group_admin_id == ^actor(:id) or requester.id == ^actor(:id)))
     end
 
-    read :by_requester do
-      argument :group, :uuid do
-        allow_nil? false
-      end
-
-      argument :requester, :uuid do
-        allow_nil? false
-      end
-
-      filter(expr(requester_id == ^arg(:requester) and group_id == ^arg(:group)))
+    read :get do
+      get? true
     end
 
     create :create do
@@ -57,20 +50,10 @@ defmodule Digsync.Accounts.GroupRequest do
     belongs_to(:requester, Digsync.Accounts.User, allow_nil?: false)
   end
 
-  policies do
-    policy action(:create) do
-      authorize_if IsGroupAdmin
-    end
-
-    policy action(:read) do
-      authorize_if expr(group.group_admin_id == ^actor(:id) or requester_id == ^actor(:id))
-    end
-  end
-
   code_interface do
     define_for Digsync.Accounts
 
-    define :by_requester, args: [:requester, :group]
+    define :read, args: [:group]
   end
 
   identities do
