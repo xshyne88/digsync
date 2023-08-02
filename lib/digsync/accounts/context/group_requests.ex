@@ -6,6 +6,7 @@ defmodule Digsync.Accounts.GroupRequests do
   def get(id) do
     GroupRequest
     |> Ash.Query.for_read(:by_id, %{id: id})
+    |> Ash.Query.load([:requester, :group])
     |> Accounts.read_one()
     |> case do
       {:ok, nil} -> {:error, :not_found}

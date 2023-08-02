@@ -16,20 +16,18 @@ defmodule Digsync.Accounts.Policies.IsGroupAdmin do
   #       changeset: _changeset
   #     }) do
   #   # group_request = Ash.Changeset.get_argument(:group_request)
-  #   # group_request.group.group_admin_id == actor.id
   #   true
   # end
 
   # def match?(actor, %{resource: GroupRequest, changeset: changeset}, _opts) do
   #   group = get_group(changeset)
 
-  #   group.group_admin_id == actor.id
+  #   group.group_admin_id == actor.id || group_membership.member.id == actor.id
   # end
 
   # def match?(actor, %{resource: GroupMembership, changeset: changeset} = ctx, _opts) do
   #   group = get_group(changeset)
 
-  #   group.group_admin_id == actor.id
   # end
 
   def match?(_actor, _params, _opts) do

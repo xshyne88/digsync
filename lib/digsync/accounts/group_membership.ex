@@ -16,7 +16,7 @@ defmodule Digsync.Accounts.GroupMembership do
     uuid_primary_key(:id)
 
     attribute :group_type, :atom do
-      default :member
+      default(:member)
       constraints(one_of: [:admin, :member])
     end
   end
@@ -25,14 +25,29 @@ defmodule Digsync.Accounts.GroupMembership do
     defaults([:update, :destroy])
 
     read :read do
+      primary?(true)
       filter(expr(^actor(:id) == member_id or group_type == :admin))
     end
 
+    create :group_created do
+      description("""
+      Creates a GroupMembership for a newly created group
+      """)
+
+      argument :group, :uuid do
+        allow_nil?(false)
+      end
+
+      change(set_attribute(:group_type, :admin))
+      change(manage_relationship(:group, type: :append_and_remove))
+      change(relate_actor(:member))
+    end
+
     create :create do
-      primary? true
+      primary?(true)
 
       argument :group_request, :uuid do
-        allow_nil? false
+        allow_nil?(false)
       end
 
       change(fn changeset, %{actor: actor} ->
@@ -58,15 +73,12 @@ defmodule Digsync.Accounts.GroupMembership do
 
   policies do
     policy action_type(:create) do
-      authorize_if IsGroupAdmin
+      authorize_if(IsGroupAdmin)
     end
 
-    # policy action(:read) do
-    #   authorize_if expr(
-    #                  group.group_admin_id == ^actor(:id) or member_id == ^actor(:id) or
-    #                    group_type == :admin
-    #                )
-    # end
+    policy action(:read) do
+      authorize_if(always())
+    end
   end
 
   relationships do
@@ -75,6 +87,6 @@ defmodule Digsync.Accounts.GroupMembership do
   end
 
   identities do
-    identity :unique_group_member, [:group_id, :member_id]
+    identity(:unique_group_member, [:group_id, :member_id])
   end
 end
