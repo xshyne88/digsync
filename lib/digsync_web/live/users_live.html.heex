@@ -1,16 +1,16 @@
 <!-- lib/digsync_web/live/users_live.html.heex -->
 <div class="container mx-auto px-4">
   <h1 class="text-2xl font-bold my-4">User List</h1>
-  <div x-data="{ sortOrder: 'asc' }">
-    <!-- Add the sorting button -->
+  <div>
+    <!-- Update the button with phx-click attribute -->
     <button
       class="bg-blue-500 text-white px-4 py-2 rounded-lg"
-      @click="sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'"
+      phx-click="toggle_sort_order"
     >
       Sort by Name
     </button>
     <div>
-      <%= for user <- Enum.sort_by(@users, &(&1.first_name), :asc) do %>
+      <%= for user <- @users do %>
       <div class="user-card bg-blue-200 p-4 my-4">
         <h2 class="text-2xl font-bold text-blue-600">
           <%= "#{user.first_name} #{user.last_name}" %>
