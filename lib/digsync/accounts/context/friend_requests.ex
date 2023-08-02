@@ -12,7 +12,7 @@ defmodule Digsync.Accounts.FriendRequests do
 
   def accepted(%FriendRequest{} = friend_request) do
     friend_request
-    |> Ash.Changeset.for_destroy(:friend_request_response)
+    |> Ash.Changeset.for_destroy(:soft)
     |> Accounts.destroy()
     |> case do
       :ok -> {:ok, friend_request}
