@@ -3,7 +3,7 @@ defmodule Digsync.Accounts.GroupMessage do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshGraphql.Resource]
 
-  alias Digsync.Accounts.Messages
+  # alias Digsync.Accounts.Messages
 
   postgres do
     table("group_messages")
