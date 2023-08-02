@@ -45,7 +45,7 @@ defmodule Digsync.Accounts.User do
       constraints(one_of: Digsync.Types.Gender.values())
     end
 
-    attribute :age, :integer
+    attribute(:age, :integer)
     # attribute :age, :integer do
     # constraints(min: 10, max: 99)
     # end
@@ -64,18 +64,18 @@ defmodule Digsync.Accounts.User do
     defaults([:read, :create, :update, :destroy])
 
     read :by_first_and_last do
-      get_by [:first_name, :last_name]
+      get_by([:first_name, :last_name])
     end
 
     read :by_first do
-      get_by [:first_name]
+      get_by([:first_name])
     end
 
     create :example do
       argument :email, :string do
       end
 
-      change set_attribute(:email, arg(:email))
+      change(set_attribute(:email, arg(:email)))
     end
 
     read :current_user do

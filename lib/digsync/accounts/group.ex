@@ -10,6 +10,17 @@ defmodule Digsync.Accounts.Group do
     repo(Digsync.Repo)
   end
 
+  calculations do
+    calculate(
+      :admin?,
+      :boolean,
+      expr(
+        exists(group_memberships, member_id == ^actor(:id)) and
+          exists(group_memberships, group_type == :admin)
+      )
+    )
+  end
+
   attributes do
     uuid_primary_key(:id)
 
@@ -74,7 +85,7 @@ defmodule Digsync.Accounts.Group do
   end
 
   calculations do
-    calculate :is_group_admin, :boolean, {GroupAdminOnGroup, []}
+    calculate(:is_group_admin, :boolean, {GroupAdminOnGroup, []})
   end
 
   relationships do
@@ -82,6 +93,7 @@ defmodule Digsync.Accounts.Group do
 
     many_to_many :group_members, Digsync.Accounts.User do
       through(Digsync.Accounts.GroupMembership)
+      join_relationship(:group_memberships)
       destination_attribute_on_join_resource(:member_id)
       source_attribute_on_join_resource(:group_id)
     end
