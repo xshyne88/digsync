@@ -3,9 +3,22 @@ defmodule Digsync.Accounts.Group do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshGraphql.Resource]
 
+  alias Digsync.Accounts.Calculations.GroupAdminOnGroup
+
   postgres do
     table("groups")
     repo(Digsync.Repo)
+  end
+
+  calculations do
+    calculate(
+      :admin?,
+      :boolean,
+      expr(
+        exists(group_memberships, member_id == ^actor(:id)) and
+          exists(group_memberships, group_type == :admin)
+      )
+    )
   end
 
   attributes do
@@ -47,7 +60,21 @@ defmodule Digsync.Accounts.Group do
     defaults([:read, :update, :destroy])
 
     create :create do
-      change(relate_actor(:group_admin))
+      change(fn changeset, %{actor: actor} ->
+        Ash.Changeset.after_action(changeset, fn changeset, group ->
+          Digsync.Accounts.GroupMembership
+          |> Ash.Changeset.for_create(:group_created, %{group: group.id}, actor: actor)
+          |> Digsync.Accounts.create()
+          |> case do
+            {:ok, _} ->
+              {:ok, group}
+
+            error ->
+              error
+          end
+        end)
+      end)
+
       change(relate_actor(:creator))
     end
   end
@@ -57,12 +84,16 @@ defmodule Digsync.Accounts.Group do
     identity(:unique_group_id, [:id])
   end
 
+  calculations do
+    calculate(:is_group_admin, :boolean, {GroupAdminOnGroup, []})
+  end
+
   relationships do
     belongs_to(:creator, Digsync.Accounts.User, allow_nil?: false)
-    belongs_to(:group_admin, Digsync.Accounts.User, allow_nil?: true)
 
     many_to_many :group_members, Digsync.Accounts.User do
       through(Digsync.Accounts.GroupMembership)
+      join_relationship(:group_memberships)
       destination_attribute_on_join_resource(:member_id)
       source_attribute_on_join_resource(:group_id)
     end

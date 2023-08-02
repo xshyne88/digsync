@@ -26,7 +26,7 @@ defmodule Digsync.Accounts.GroupRequest do
         allow_nil?(false)
       end
 
-      filter(expr(group.group_admin_id == ^actor(:id) or requester.id == ^actor(:id)))
+      filter(expr(requester.id == ^actor(:id)))
     end
 
     read :all do

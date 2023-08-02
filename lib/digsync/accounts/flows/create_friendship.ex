@@ -19,7 +19,7 @@ defmodule Digsync.Accounts.Flows.CreateFriendship do
 
       destroy :destroy_friendship_request,
               Digsync.Accounts.FriendRequest,
-              :friend_request_response do
+              :soft do
         input %{
           friend_request_id: path(result(:get_friend_request), [:id])
         }

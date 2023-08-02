@@ -4,55 +4,53 @@ defmodule DigsyncWeb.Router do
 
   import AshAdmin.Router
 
-  # * Read up plugs + macros
-
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_live_flash
-    plug :put_root_layout, html: {DigsyncWeb.Layouts, :root}
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-    plug :load_from_session
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:put_root_layout, html: {DigsyncWeb.Layouts, :root})
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
+    plug(:load_from_session)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
-    plug :load_from_bearer
+    plug(:accepts, ["json"])
+    plug(:load_from_bearer)
   end
 
   pipeline :graphql do
-    plug :fetch_session
-    plug :load_from_session
-    plug DigsyncWeb.Plugs.SetActor
-    plug AshGraphql.Plug
+    plug(:fetch_session)
+    plug(:load_from_session)
+    plug(DigsyncWeb.Plugs.SetActor)
+    plug(AshGraphql.Plug)
   end
-  # Create scope for diff route
 
   scope "/", DigsyncWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", PageController, :home
-    live "/users", UsersLive
+    get("/", PageController, :home)
+    live("/users", UsersLive)
     sign_in_route()
-    sign_out_route AuthController
-    auth_routes_for Digsync.Accounts.User, to: AuthController
-    reset_route []
+    sign_out_route(AuthController)
+    auth_routes_for(Digsync.Accounts.User, to: AuthController)
+    reset_route([])
   end
 
   scope "/dev" do
-    pipe_through :browser
+    pipe_through(:browser)
     ash_admin("/admin")
   end
 
   scope "/graphql" do
-    pipe_through :graphql
+    pipe_through(:graphql)
 
-    forward "/api", Absinthe.Plug, schema: DigsyncWeb.Schema
+    forward("/api", Absinthe.Plug, schema: DigsyncWeb.Schema)
 
-    forward "/playground", Absinthe.Plug.GraphiQL,
+    forward("/playground", Absinthe.Plug.GraphiQL,
       schema: DigsyncWeb.Schema,
       interface: :advanced
+    )
   end
 
   # Other scopes may use custom stacks.
@@ -79,10 +77,10 @@ defmodule DigsyncWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
-      pipe_through :browser
+      pipe_through(:browser)
 
-      live_dashboard "/dashboard", metrics: DigsyncWeb.Telemetry
-      forward "/mailbox", Plug.Swoosh.MailboxPreview
+      live_dashboard("/dashboard", metrics: DigsyncWeb.Telemetry)
+      forward("/mailbox", Plug.Swoosh.MailboxPreview)
     end
   end
 end

@@ -44,7 +44,7 @@ defmodule Digsync.Accounts.FriendRequest do
       filter(receiver_id: actor(:id), sender_id: arg(:sender))
     end
 
-    destroy :friend_request_response do
+    destroy :soft do
       change set_attribute(:deleted_at, &DateTime.utc_now/0)
       soft? true
     end
