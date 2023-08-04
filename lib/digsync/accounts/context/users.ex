@@ -19,10 +19,12 @@ defmodule Digsync.Accounts.Users do
     |> Accounts.update()
   end
 
-  @spec list_all() :: {:ok, [User.t()]} | {:error, any()}
-  def list_all() do
+  @spec list_all(:asc | :desc) :: {:ok, [User.t()]} | {:error, any()}
+  def list_all(sort \\ :desc) do
     User
     |> Ash.Query.for_read(:read)
+    |> Ash.Query.sort(first_name: sort)
+    |> Ash.Query.deselect(:hashed_pashword)
     |> Accounts.read()
   end
 

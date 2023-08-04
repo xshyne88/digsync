@@ -1,29 +1,71 @@
 defmodule DigsyncWeb.UsersLive do
   use DigsyncWeb, :live_view
 
-  def mount(_params, _session, socket) do
-    socket =
-      assign(socket, users: Digsync.Accounts.read!(Digsync.Accounts.User), sort_order: "asc")
+  alias Digsync.Accounts
+  alias Digsync.Accounts.User
+  alias Digsync.Accounts.Users
 
-    {:ok, socket}
+  def mount(_params, _session, socket) do
+    initial_sort = "asc"
+    {:ok, assign(socket, users: fetch_users(initial_sort), sort_order: initial_sort)}
   end
 
-  def handle_event("toggle_sort_order", _, socket) do
-    current_order = Map.get(socket.assigns, :sort_order, "asc")
-    new_order = if current_order == "asc", do: "desc", else: "asc"
-    updated_socket = assign(socket, :sort_order, new_order)
+  def handle_event("toggle_sort_order", %{"sort_order" => sort_order}, socket) do
+    new_sort_order = toggle_sort_order(sort_order)
 
-    # Perform user sorting based on the new_order in the assigns
-    sorted_users =
-      if new_order == "asc" do
-        Enum.sort_by(updated_socket.assigns.users, &String.downcase(&1.first_name))
-      else
-        Enum.sort_by(updated_socket.assigns.users, &String.downcase(&1.first_name), :desc)
-      end
+    {:noreply, assign(socket, users: fetch_users(new_sort_order), sort_order: new_sort_order)}
+  end
 
-    # Update the socket assigns with the sorted users list
-    updated_socket = assign(updated_socket, :users, sorted_users)
+  defp toggle_sort_order("asc"), do: "desc"
+  defp toggle_sort_order("desc"), do: "asc"
 
-    {:noreply, updated_socket}
+  defp fetch_users(sort_order) when is_binary(sort_order) do
+    sort_order
+    |> String.to_atom()
+    |> fetch_users()
+  end
+
+  defp fetch_users(sort_order) do
+    sort_order
+    |> Users.list_all()
+    |> case do
+      {:ok, users} ->
+        users
+
+      # ignore errors for now
+      _ ->
+        nil
+    end
+    |> sanitize_users()
+  end
+
+  @display_fields [
+    :address,
+    :age,
+    :bio,
+    :email,
+    :facebook_link,
+    :first_name,
+    :gender,
+    :github_link,
+    :instagram_link,
+    :last_name,
+    :linkedin_link,
+    :phone_number,
+    :skill_level
+  ]
+
+  defp sanitize_users(nil), do: nil
+
+  defp sanitize_users(users) do
+    Enum.map(users, fn user ->
+      user
+      |> Map.from_struct()
+      |> Enum.reduce(%{}, fn
+        {_key, nil}, acc -> acc
+        {key, value}, acc when key in @display_fields -> Map.put(acc, key, to_string(value))
+        {_, _}, acc -> acc
+      end)
+    end)
   end
 end
