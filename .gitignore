@@ -38,3 +38,4 @@ npm-debug.log
 # mac stuff
 .DS_Store
 
+config/
