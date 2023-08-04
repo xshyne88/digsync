@@ -1,7 +1,7 @@
 defmodule Digsync.Accounts.Group do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshGraphql.Resource]
+    extensions: [AshGraphql.Resource, AshAdmin.Resource]
 
   alias Digsync.Accounts.Calculations.GroupAdminOnGroup
 

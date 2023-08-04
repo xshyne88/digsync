@@ -8,6 +8,11 @@ defmodule Digsync.Accounts.GroupRequest do
     repo(Digsync.Repo)
   end
 
+  resource do
+    description("Requests are soft deleted to preserve the record")
+    base_filter(is_nil: :deleted_at)
+  end
+
   attributes do
     uuid_primary_key(:id)
 
@@ -20,7 +25,7 @@ defmodule Digsync.Accounts.GroupRequest do
     defaults([:update, :destroy])
 
     read :read do
-      primary? true
+      primary?(true)
 
       argument :group, :uuid do
         allow_nil?(false)
@@ -29,11 +34,15 @@ defmodule Digsync.Accounts.GroupRequest do
       filter(expr(requester.id == ^actor(:id)))
     end
 
+    read :mine do
+      filter(expr(requester.id == ^actor(:id)))
+    end
+
     read :all do
     end
 
     read :by_id do
-      get_by :id
+      get_by(:id)
     end
 
     create :create do
@@ -48,8 +57,8 @@ defmodule Digsync.Accounts.GroupRequest do
     end
 
     destroy :soft do
-      change set_attribute(:deleted_at, &DateTime.utc_now/0)
-      soft? true
+      change(set_attribute(:deleted_at, &DateTime.utc_now/0))
+      soft?(true)
     end
   end
 
@@ -59,9 +68,9 @@ defmodule Digsync.Accounts.GroupRequest do
   end
 
   code_interface do
-    define_for Digsync.Accounts
+    define_for(Digsync.Accounts)
 
-    define :read, args: [:group]
+    define(:read, args: [:group])
   end
 
   identities do

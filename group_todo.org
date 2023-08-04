@@ -1,0 +1,25 @@
+* Social Media
+** Users can see all Groups, make groups either clickable to go to a group display page
+** Users can see Group Display page and make a request to join a group
+** Group Admins see all pending Group Requests and can accept them
+** Users inside of a Group can see other members in a group
+** Users can send private messages and see messages that they have sent and received from other users (display for that)
+** Users can send messages to a group and can see other previously sent messages
+* Authentication
+** figure out how we are going to work the frontend so we can decide where to show sign in/up
+** Oauth2 flows, (google facebook) probably separate from liveviews and will be on the home page somewhere
+** Admin Dashboard (Ash Framework has built in support need to implement)
+** We need to verify that our Magic Links work and sign people in via email
+* Event Scheduling
+** frontend calendar showing? time showing? figure out how users can input datetimes whats best way to do that
+** figure out how to store time availability as datetimes for users
+** queries on the backend for filtering by availability in postgres
+** figure out how to seed events, so that we have data to play with for filtering
+** maybe do some research on how other apps accomplish event scheduling
+* Locations
+** Ash-geo queries for st_within
+** normalize our addresses to actually have fields, city state zip road name etc instead of just a string
+** try a ton of different addresses on our http endpoint to see if it actually works
+** Have events be assignable to a location (via a relationship)
+** 
+

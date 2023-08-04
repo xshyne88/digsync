@@ -10,6 +10,10 @@ defmodule Digsync.Accounts.FriendRequests do
     |> Accounts.read_one()
   end
 
+  def get(id) do
+    Accounts.read_one(FriendRequest, id)
+  end
+
   def accepted(%FriendRequest{} = friend_request) do
     friend_request
     |> Ash.Changeset.for_destroy(:soft)

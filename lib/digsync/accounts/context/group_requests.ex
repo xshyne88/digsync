@@ -3,6 +3,7 @@ defmodule Digsync.Accounts.GroupRequests do
   alias Digsync.Accounts.GroupRequest
   require Ash.Query
 
+  @spec get(String.t()) :: {:ok, GroupRequest.t()} | {:error, :not_found}
   def get(id) do
     GroupRequest
     |> Ash.Query.for_read(:by_id, %{id: id})
@@ -14,6 +15,7 @@ defmodule Digsync.Accounts.GroupRequests do
     end
   end
 
+  @spec accepted(String.t()) :: {:ok, GroupRequest.t()} | any()
   def accepted(%GroupRequest{} = group_request) do
     group_request
     |> Ash.Changeset.for_destroy(:soft)

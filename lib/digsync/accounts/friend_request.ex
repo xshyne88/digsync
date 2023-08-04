@@ -8,9 +8,10 @@ defmodule Digsync.Accounts.FriendRequest do
     repo(Digsync.Repo)
   end
 
-  # resource do
-  #   base_filter is_nil: :deleted_at
-  # end
+  resource do
+    description("Requests are soft deleted to preserve the record")
+    base_filter(is_nil: :deleted_at)
+  end
 
   attributes do
     uuid_primary_key(:id)
@@ -21,32 +22,35 @@ defmodule Digsync.Accounts.FriendRequest do
   end
 
   actions do
-    defaults([:read, :update])
+    defaults([:update])
+
+    read :one do
+    end
 
     create :create do
-      accept []
+      accept([])
 
       argument :receiver, :uuid do
-        allow_nil? false
+        allow_nil?(false)
       end
 
-      change relate_actor(:sender)
-      change manage_relationship(:receiver, type: :append_and_remove)
+      change(relate_actor(:sender))
+      change(manage_relationship(:receiver, type: :append_and_remove))
     end
 
     read :by_sender do
       get?(true)
 
       argument :sender, :uuid do
-        allow_nil? false
+        allow_nil?(false)
       end
 
       filter(receiver_id: actor(:id), sender_id: arg(:sender))
     end
 
     destroy :soft do
-      change set_attribute(:deleted_at, &DateTime.utc_now/0)
-      soft? true
+      change(set_attribute(:deleted_at, &DateTime.utc_now/0))
+      soft?(true)
     end
   end
 
@@ -56,6 +60,6 @@ defmodule Digsync.Accounts.FriendRequest do
   end
 
   identities do
-    identity :unique_friend_request, [:sender_id, :receiver_id]
+    identity(:unique_friend_request, [:sender_id, :receiver_id])
   end
 end

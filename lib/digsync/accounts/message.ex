@@ -1,7 +1,7 @@
 defmodule Digsync.Accounts.Message do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshGraphql.Resource]
+    extensions: [AshGraphql.Resource, AshAdmin.Resource]
 
   postgres do
     table("messages")
@@ -12,7 +12,7 @@ defmodule Digsync.Accounts.Message do
     uuid_primary_key(:id)
 
     attribute :text, :string do
-      constraints allow_empty?: false
+      constraints(allow_empty?: false)
     end
 
     create_timestamp(:inserted_at, private?: false, allow_nil?: false)
@@ -20,11 +20,11 @@ defmodule Digsync.Accounts.Message do
   end
 
   actions do
-    defaults [:read, :update, :destroy]
+    defaults([:read, :update, :destroy])
 
     read :read_by_author do
       argument :author_id, :uuid do
-        allow_nil? false
+        allow_nil?(false)
       end
 
       filter(expr(author_id == arg(:author_id)))
@@ -32,8 +32,8 @@ defmodule Digsync.Accounts.Message do
 
     create :create do
       accept([:text, :inserted_at])
-      primary? true
-      change relate_actor(:author)
+      primary?(true)
+      change(relate_actor(:author))
     end
   end
 
@@ -42,6 +42,6 @@ defmodule Digsync.Accounts.Message do
   end
 
   identities do
-    identity :unique_message_id, [:id]
+    identity(:unique_message_id, [:id])
   end
 end

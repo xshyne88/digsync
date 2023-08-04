@@ -1,11 +1,15 @@
 defmodule Digsync.Accounts.User do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshAuthentication, AshGraphql.Resource]
+    extensions: [AshAuthentication, AshGraphql.Resource, AshAdmin.Resource]
 
   postgres do
     table("users")
     repo(Digsync.Repo)
+  end
+
+  admin do
+    actor?(true)
   end
 
   attributes do
@@ -29,28 +33,21 @@ defmodule Digsync.Accounts.User do
     end
 
     attribute(:address, :string)
-
     attribute(:hashed_password, :string, allow_nil?: false, sensitive?: true)
     attribute(:first_name, :string)
     attribute(:last_name, :string)
     attribute(:phone_number, :string)
-
     attribute(:facebook_link, :string)
     attribute(:instagram_link, :string)
     attribute(:linkedin_link, :string)
     attribute(:github_link, :string)
+    attribute(:age, :integer)
+    attribute(:bio, :string)
 
     attribute :gender, :atom do
       default(:male)
       constraints(one_of: Digsync.Types.Gender.values())
     end
-
-    attribute(:age, :integer)
-    # attribute :age, :integer do
-    # constraints(min: 10, max: 99)
-    # end
-
-    attribute(:bio, :string)
 
     attribute :skill_level, :atom do
       constraints(one_of: Digsync.Types.SkillLevel.values())
@@ -61,7 +58,9 @@ defmodule Digsync.Accounts.User do
   end
 
   actions do
-    defaults([:read, :create, :update, :destroy])
+    read :read do
+      primary?(true)
+    end
 
     read :by_first_and_last do
       get_by([:first_name, :last_name])
@@ -71,17 +70,23 @@ defmodule Digsync.Accounts.User do
       get_by([:first_name])
     end
 
-    create :example do
-      argument :email, :string do
-      end
-
-      change(set_attribute(:email, arg(:email)))
-    end
-
     read :current_user do
       get?(true)
 
       filter(id: actor(:id))
+    end
+
+    create :create do
+      primary?(true)
+      upsert?(true)
+    end
+
+    update :update do
+      primary?(true)
+    end
+
+    destroy :destroy do
+      primary?(true)
     end
   end
 
