@@ -2,6 +2,7 @@ defmodule DigsyncWeb.PrivateMessageLive do
   use DigsyncWeb, :live_view
 
   def mount(%{"user_id" => user_id}, _session, socket) do
+    # TODO: Validate user_id against a real user
     current_user = socket.assigns.current_user
     form = generate_form(current_user)
     {:ok, assign(socket, actor: current_user, user_id: user_id, form: form)}
@@ -42,15 +43,20 @@ defmodule DigsyncWeb.PrivateMessageLive do
 
   def handle_event("submit", %{"form" => params}, socket) do
     case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
-      {:ok, _message} ->
-        {:noreply, put_flash(socket, :info, "Created Private Message!")}
+      {:ok, message} ->
+        {:noreply,
+         put_flash(
+           socket,
+           :info,
+           "Sent Private message to: #{message.recipient.first_name} #{message.recipient.last_name}!"
+         )}
 
       {:error, form} ->
         {:noreply, assign(socket, form: form)}
     end
   end
 
-  def generate_form(actor) do
+  defp generate_form(actor) do
     Digsync.Accounts.PrivateMessage
     |> AshPhoenix.Form.for_create(:create, api: Digsync.Accounts, actor: actor)
     |> to_form()
