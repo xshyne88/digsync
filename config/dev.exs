@@ -2,7 +2,7 @@ import Config
 
 # Configure your database
 config :digsync, Digsync.Repo,
-  username: "lukeanglin",
+  username: System.get_env("DB_USERNAME"),
   password: "postgres",
   hostname: "localhost",
   database: "digsync_dev",

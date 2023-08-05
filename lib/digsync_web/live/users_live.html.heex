@@ -11,41 +11,41 @@
     </button>
     <div>
       <%= for user <- @users do %>
-      <div class="user-card bg-blue-200 p-4 my-4 relative">
-        <!-- Add relative positioning class -->
+        <div class="user-card bg-blue-200 p-4 my-4 relative">
+          <!-- Add relative positioning class -->
         <!-- Add absolute positioning classes for the avatar -->
-        <img
-          src="https://freepngimg.com/thumb/family_guy/26213-9-family-guy-photos.png"
-          alt="Avatar"
-          class="absolute top-2 right-2"
-          width="50"
-          height="50"
-        />
+          <img
+            src="https://freepngimg.com/thumb/family_guy/26213-9-family-guy-photos.png"
+            alt="Avatar"
+            class="absolute top-2 right-2"
+            width="50"
+            height="50"
+          />
 
-        <h2 class="text-2xl font-bold text-blue-600">
-          <%= "#{user.first_name} #{user.last_name}" %>
-        </h2>
-        <ul>
-          <%= for {key, value} <- Map.to_list(user) do %>
-          <li><b><%= key %></b>: <%= value %></li>
-          <% end %>
-        </ul>
-        <!-- Add the "View User" button with phx-click -->
-        <button
-          class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2"
-          phx-click="view_user"
-          phx-value-user_id="{user.id}"
-        >
-          View User
-        </button>
-        <button
-          class="bg-blue-500 text-white px-4 py-2 rounded-lg"
-          phx-click="send_private_message"
-          phx-value-user_id="{user.id}"
-        >
-          Send Private Message
-        </button>
-      </div>
+          <h2 class="text-2xl font-bold text-blue-600">
+            <%= "#{user.first_name} #{user.last_name}" %>
+          </h2>
+          <ul>
+            <%= for {key, value} <- Map.to_list(user) do %>
+              <li><b><%= key %></b>: <%= value %></li>
+            <% end %>
+          </ul>
+          <!-- Add the "View User" button with phx-click -->
+          <button
+            class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2"
+            phx-click="view_user"
+            phx-value-user_id={user.id}
+          >
+            View User
+          </button>
+          <button
+            class="bg-blue-500 text-white px-4 py-2 rounded-lg"
+            phx-click="send_private_message"
+            phx-value-user_id={user.id}
+          >
+            Send Private Message
+          </button>
+        </div>
       <% end %>
     </div>
   </div>

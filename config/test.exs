@@ -6,7 +6,7 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :digsync, Digsync.Repo,
-  username: "chase",
+  username: System.get_env("DB_USERNAME"),
   password: "postgres",
   hostname: "localhost",
   database: "digsync_test#{System.get_env("MIX_TEST_PARTITION")}",
