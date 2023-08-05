@@ -1,0 +1,23 @@
+<!-- lib/digsync_web/live/user_details_live.html.heex -->
+<div class="container mx-auto px-4">
+  <h1 class="text-2xl font-bold my-4">User Details</h1>
+  <div class="user-details-card bg-blue-200 p-4 my-4 relative">
+    <!-- Display the user's photo -->
+    <img
+      src="https://freepngimg.com/thumb/family_guy/26213-9-family-guy-photos.png"
+      alt="Avatar"
+      class="absolute top-2 right-2"
+      width="50"
+      height="50"
+    />
+
+    <h2 class="text-2xl font-bold text-blue-600">
+      <%= "#{@user.first_name} #{@user.last_name}" %>
+    </h2>
+    <ul>
+      <%= for {key, value} <- Map.to_list(@user) do %>
+      <li><b><%= key %></b>: <%= value %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

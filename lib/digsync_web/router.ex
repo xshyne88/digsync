@@ -27,10 +27,16 @@ defmodule DigsyncWeb.Router do
   end
 
   scope "/", DigsyncWeb do
+
     pipe_through(:browser)
 
     get("/", PageController, :home)
-    live("/users", UsersLive)
+
+    live_session :default do
+      live("/users", UsersLive)
+      live("/users/:id", UserDetailsLive)
+    end
+
     sign_in_route()
     sign_out_route(AuthController)
     auth_routes_for(Digsync.Accounts.User, to: AuthController)
