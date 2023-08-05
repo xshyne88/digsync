@@ -4,7 +4,7 @@ defmodule DigsyncWeb.UserDetailsLive do
   alias Digsync.Accounts.Users
 
   @impl true
-  def mount(%{"id" => user_id}, _session, socket) do
+  def mount(%{"user_id" => user_id}, _session, socket) do
     {:ok, user} = Users.get(user_id)
     {:ok, assign(socket, user: sanitize_user(user))}
   end

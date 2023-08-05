@@ -2,12 +2,10 @@ defmodule DigsyncWeb.UsersLive do
   use DigsyncWeb, :live_view
 
   alias Digsync.Accounts.Users
-<<<<<<< HEAD
   alias DigsyncWeb.UserDetailsLive
 
-=======
+
   alias DigsyncWeb.PrivateMessageLive
->>>>>>> ad7d65bf907c14a7d39520dda1045f108680a1dc
   alias DigsyncWeb.Router.Helpers, as: Routes
 
   def mount(_params, _session, socket) do
@@ -21,16 +19,14 @@ defmodule DigsyncWeb.UsersLive do
     {:noreply, assign(socket, users: fetch_users(new_sort_order), sort_order: new_sort_order)}
   end
 
-<<<<<<< HEAD
   # Add this new handle_event clause to handle the "View User" button click
   def handle_event("view_user", %{"user_id" => user_id}, socket) do
     socket = push_navigate(socket, to: Routes.live_path(socket, UserDetailsLive, user_id))
     {:noreply, socket}
-=======
+  end
   def handle_event("send_private_message", %{"user_id" => user_id}, socket) do
     path = Routes.live_path(socket, PrivateMessageLive, user_id)
     {:noreply, push_navigate(socket, to: path)}
->>>>>>> ad7d65bf907c14a7d39520dda1045f108680a1dc
   end
 
   defp toggle_sort_order("asc"), do: "desc"
