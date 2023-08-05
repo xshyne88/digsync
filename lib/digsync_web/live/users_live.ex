@@ -1,9 +1,9 @@
 defmodule DigsyncWeb.UsersLive do
   use DigsyncWeb, :live_view
 
-  alias Digsync.Accounts
-  alias Digsync.Accounts.User
   alias Digsync.Accounts.Users
+  alias DigsyncWeb.PrivateMessageLive
+  alias DigsyncWeb.Router.Helpers, as: Routes
 
   def mount(_params, _session, socket) do
     initial_sort = "asc"
@@ -14,6 +14,11 @@ defmodule DigsyncWeb.UsersLive do
     new_sort_order = toggle_sort_order(sort_order)
 
     {:noreply, assign(socket, users: fetch_users(new_sort_order), sort_order: new_sort_order)}
+  end
+
+  def handle_event("send_private_message", %{"user_id" => user_id}, socket) do
+    path = Routes.live_path(socket, PrivateMessageLive, user_id)
+    {:noreply, push_navigate(socket, to: path)}
   end
 
   defp toggle_sort_order("asc"), do: "desc"
@@ -32,7 +37,7 @@ defmodule DigsyncWeb.UsersLive do
       {:ok, users} ->
         users
 
-      # ignore errors for now
+      # TODO: swallows error, need to handle
       _ ->
         nil
     end
@@ -40,6 +45,7 @@ defmodule DigsyncWeb.UsersLive do
   end
 
   @display_fields [
+    :id,
     :address,
     :age,
     :bio,

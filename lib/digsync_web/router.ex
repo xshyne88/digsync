@@ -29,8 +29,12 @@ defmodule DigsyncWeb.Router do
   scope "/", DigsyncWeb do
     pipe_through(:browser)
 
+    ash_authentication_live_session :users do
+      live("/users", UsersLive)
+      live("/create-message/:user_id", PrivateMessageLive)
+    end
+
     get("/", PageController, :home)
-    live("/users", UsersLive)
     sign_in_route()
     sign_out_route(AuthController)
     auth_routes_for(Digsync.Accounts.User, to: AuthController)
