@@ -13,9 +13,10 @@ defmodule UserSeed do
   def family_guy_seeds do
     data = FamilyGuy.data()
 
+    family_guy_users =
     FamilyGuy.names()
     |> Enum.map(&build_user(data[&1], []))
-    |> Enum.each(&log_user/1)
+    |> Enum.map(&log_user/1)
 
     peter =
       User
@@ -41,6 +42,16 @@ defmodule UserSeed do
     GroupRequest
     |> Ash.Changeset.for_create(:create, %{group: griffins.id}, actor: stewie)
     |> Accounts.create!()
+
+    family_guy_users
+    |> Enum.filter(& &1.id != peter.id)
+    |> Enum.map(fn
+      fg ->
+      GroupMembership
+      |> Ash.Changeset.for_create(:seed_create, %{group: griffins.id}, actor: fg)
+      |> Accounts.create!()
+    end)
+
   end
 
   def developer_users do
@@ -56,5 +67,6 @@ defmodule UserSeed do
     require Logger
 
     Logger.info("Created user: #{user.first_name} #{user.last_name} - #{user.email}")
+    user
   end
 end
