@@ -30,6 +30,11 @@ defmodule DigsyncWeb.Router do
 
     pipe_through(:browser)
 
+    ash_authentication_live_session :users do
+      live("/users", UsersLive)
+      live("/create-message/:user_id", PrivateMessageLive)
+    end
+
     get("/", PageController, :home)
 
     live_session :default do

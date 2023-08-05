@@ -12,8 +12,20 @@
     <div>
       <%= for user <- @users do %>
         <div class="user-card bg-blue-200 p-4 my-4 relative">
+<<<<<<< HEAD
           <img src="https://freepngimg.com/thumb/family_guy/26213-9-family-guy-photos.png" alt="Avatar"
             class="absolute top-2 right-2" width="50" height="50">
+=======
+          <!-- Add relative positioning class -->
+    <!-- Add absolute positioning classes for the avatar -->
+          <img
+            src="https://freepngimg.com/thumb/family_guy/26213-9-family-guy-photos.png"
+            alt="Avatar"
+            class="absolute top-2 right-2"
+            width="50"
+            height="50"
+          />
+>>>>>>> ad7d65bf907c14a7d39520dda1045f108680a1dc
 
           <h2 class="text-2xl font-bold text-blue-600">
             <%= "#{user.first_name} #{user.last_name}" %>
@@ -23,6 +35,7 @@
               <li><b><%= key %></b>: <%= value %></li>
             <% end %>
           </ul>
+<<<<<<< HEAD
           <!-- Add the "View User" button with phx-click -->
           <button
             class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2"
@@ -30,6 +43,14 @@
             phx-value-user_id={user.id}
           >
             View User
+=======
+          <button
+            class="bg-blue-500 text-white px-4 py-2 rounded-lg"
+            phx-click="send_private_message"
+            phx-value-user_id={user.id}
+          >
+            Send Private Message
+>>>>>>> ad7d65bf907c14a7d39520dda1045f108680a1dc
           </button>
         </div>
       <% end %>
