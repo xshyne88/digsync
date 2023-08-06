@@ -44,7 +44,7 @@ defmodule Digsync.Accounts.GroupMembership do
       description "only admins and group members can see other group members"
       primary?(true)
       prepare build(load: [:member_email, :group_name])
-      filter(expr(^actor(:id) == member_id or group_type == :admin))
+      # filter(expr(^actor(:id) == member_id or group_type == :admin))
     end
 
     create :group_created do
