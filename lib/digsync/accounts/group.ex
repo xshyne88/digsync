@@ -89,7 +89,7 @@ defmodule Digsync.Accounts.Group do
   end
 
   calculations do
-    calculate(:is_group_admin, :boolean, {GroupAdminOnGroup, []})
+    calculate(:is_group_admin?, :boolean, {GroupAdminOnGroup, []})
   end
 
   relationships do

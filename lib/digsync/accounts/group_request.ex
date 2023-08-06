@@ -24,7 +24,7 @@ defmodule Digsync.Accounts.GroupRequest do
   actions do
     defaults([:update, :destroy])
 
-    read :read do
+    read :my_request do
       primary?(true)
 
       argument :group, :uuid do
@@ -34,7 +34,7 @@ defmodule Digsync.Accounts.GroupRequest do
       filter(expr(requester.id == ^actor(:id)))
     end
 
-    read :mine do
+    read :my_requests do
       filter(expr(requester.id == ^actor(:id)))
     end
 
@@ -70,7 +70,7 @@ defmodule Digsync.Accounts.GroupRequest do
   code_interface do
     define_for(Digsync.Accounts)
 
-    define(:read, args: [:group])
+    # define(:read, args: [:group])
   end
 
   identities do
