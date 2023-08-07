@@ -3,10 +3,10 @@ defmodule DigsyncWeb.CreateGroupLive do
   alias Digsync.Accounts.Group
   alias Digsync.Accounts
 
-  def mount(%{"user_id" => user_id}, _session, socket) do
+  def mount(_params, _session, socket) do
     current_user = socket.assigns.current_user
     form = generate_form(current_user)
-    {:ok, assign(socket, actor: current_user, user_id: user_id, form: form)}
+    {:ok, assign(socket, actor: current_user, form: form)}
   end
 
   defp generate_form(actor) do
@@ -29,6 +29,4 @@ defmodule DigsyncWeb.CreateGroupLive do
         {:noreply, assign(socket, form: form)}
     end
   end
-
-
 end

@@ -1,4 +1,30 @@
-<h1>Groups Live Page</h1>
+<!-- Add the header section -->
+<div class="flex justify-between items-center px-4 py-2 bg-gray-200">
+  <h1 class="text-2xl font-bold">Groups Live Page</h1>
+  <!-- Add the "Create Group" button with the plus sign icon -->
+  <button
+    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center"
+    phx-click="create_group"
+  >
+    <svg
+      class="w-4 h-4 mr-2"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+      ></path>
+    </svg>
+    Create Group
+  </button>
+</div>
+
+<!-- Rest of the template -->
 <p>This is a live page displaying group details.</p>
 <div>
   <%= for g <- @groups_to_creators do %>
@@ -29,7 +55,7 @@
     <button
       class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2"
       phx-click="view_group"
-      phx-value-group_id={group_id}
+      phx-value-group_id="{group_id}"
     >
       View Group
     </button>

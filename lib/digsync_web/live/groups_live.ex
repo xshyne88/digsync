@@ -5,7 +5,7 @@ defmodule DigsyncWeb.GroupsLive do
   alias Digsync.Accounts.Users
   alias DigsyncWeb.Router.Helpers, as: Routes
   alias DigsyncWeb.GroupDetailsLive
-
+  alias DigsyncWeb.CreateGroupLive
 
   def mount(_params, _session, socket) do
     # pass in groups + creator
@@ -16,6 +16,11 @@ defmodule DigsyncWeb.GroupsLive do
 
   def handle_event("view_group", %{"group_id" => group_id}, socket) do
     socket = push_navigate(socket, to: Routes.live_path(socket, GroupDetailsLive, group_id))
+    {:noreply, socket}
+  end
+
+  def handle_event("create_group", _, socket) do
+    socket = push_navigate(socket, to: Routes.live_path(socket, CreateGroupLive))
     {:noreply, socket}
   end
 
@@ -39,15 +44,12 @@ defmodule DigsyncWeb.GroupsLive do
 
   defp fetch_groups() do
     Group
-      |> Accounts.read!()
-      |> sanitize_groups()
+    |> Accounts.read!()
+    |> sanitize_groups()
   end
 
   def get_map_groups_to_creators() do
     groups = fetch_groups()
     Enum.map(groups, fn group -> {group, elem(Users.get(group[:creator_id]), 1)} end)
   end
-
-
-
 end
