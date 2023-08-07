@@ -9,7 +9,7 @@ defmodule DigsyncWeb.CreateGroupLive do
     {:ok, assign(socket, actor: current_user, user_id: user_id, form: form)}
   end
 
-  def generate_form(actor) do
+  defp generate_form(actor) do
     Accounts.Group
     |> AshPhoenix.Form.for_create(:create, api: Digsync.Accounts, actor: actor)
     |> to_form()
@@ -21,14 +21,11 @@ defmodule DigsyncWeb.CreateGroupLive do
   end
 
   def handle_event("submit", %{"form" => params}, socket) do
-    IO.inspect(socket.assigns.form)
-    IO.inspect(params)
     case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
       {:ok, _message} ->
         {:noreply, put_flash(socket, :info, "Created Group!")}
 
       {:error, form} ->
-        IO.puts("error in form")
         {:noreply, assign(socket, form: form)}
     end
   end

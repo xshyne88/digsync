@@ -1,20 +1,45 @@
 defmodule DigsyncWeb.GroupsLive do
   use DigsyncWeb, :live_view
   alias Digsync.Accounts.Group
+  alias Digsync.Accounts
+  alias Digsync.Accounts.Users
 
   def mount(_params, _session, socket) do
-    socket = assign(socket, groups: fetch_groups())
+    # pass in groups + creator
+    groups = fetch_groups()
+    socket = assign(socket, groups_to_creators: get_map_groups_to_creators())
     {:ok, socket}
   end
 
-  def fetch_groups() do
+  @display_fields [
+    :id,
+    :creator_id,
+    :name
+  ]
+
+  defp sanitize_groups(groups) do
+    Enum.map(groups, fn group ->
+      group
+      |> Map.from_struct()
+      |> Enum.reduce(%{}, fn
+        {_key, nil}, acc -> acc
+        {key, value}, acc when key in @display_fields -> Map.put(acc, key, to_string(value))
+        {_, _}, acc -> acc
+      end)
+    end)
+  end
+
+  defp fetch_groups() do
     Group
       |> Accounts.read!()
+      |> sanitize_groups()
   end
 
-  def create_group() do
-
+  def get_map_groups_to_creators() do
+    groups = fetch_groups()
+    Enum.map(groups, fn group -> {group, elem(Users.get(group[:creator_id]), 1)} end)
   end
+
 
 
 end

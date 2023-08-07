@@ -1,12 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Groups Live Page</title>
-</head>
-<body>
-    <h1>Groups Live Page</h1>
-    <p>This is a live page displaying group details.</p>
-</body>
-</html>
+<h1>Groups Live Page</h1>
+<p>This is a live page displaying group details.</p>
+<div>
+  <%= for g <- @groups_to_creators do %>
+  <div class="user-card bg-blue-200 p-4 my-4 relative">
+    <!-- Add relative positioning class -->
+    <!-- Add absolute positioning classes for the avatar -->
+    <img
+      src="https://freepngimg.com/thumb/family_guy/26213-9-family-guy-photos.png"
+      alt="Avatar"
+      class="absolute top-2 right-2"
+      width="50"
+      height="50"
+    />
+
+    <h1 class="text-3xl font-bold text-blue-600"><%= "#{elem(g, 0).name}" %></h1>
+    <h2 class="text-3xl font-bold text-blue-600">
+      <%= "#{elem(g, 1).first_name} #{elem(g, 1).first_name}" %>
+    </h2>
+    <ul>
+      <%= for {key, value} <- Map.to_list(elem(g, 0)) do %>
+      <li><b><%= key %></b>: <%= value %></li>
+      <% end %>
+    </ul>
+    <!-- Add the "View User" button with phx-click -->
+    <button
+      class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2"
+      phx-click="view_user"
+      phx-value-user_id="{group.id}"
+    >
+      View Group
+    </button>
+  </div>
+  <% end %>
+</div>

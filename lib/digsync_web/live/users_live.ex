@@ -67,7 +67,6 @@ defmodule DigsyncWeb.UsersLive do
     :linkedin_link,
     :phone_number,
     :skill_level,
-    :id
   ]
 
   defp sanitize_users(nil), do: nil
