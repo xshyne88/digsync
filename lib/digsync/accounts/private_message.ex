@@ -12,23 +12,24 @@ defmodule Digsync.Accounts.PrivateMessage do
   end
 
   actions do
-    defaults [:update, :destroy]
+    defaults([:update, :destroy])
 
     read :read do
-      primary? true
+      primary?(true)
 
-      prepare build(load: [message: Ash.Query.sort(Message, inserted_at: :desc)])
+      prepare(build(load: [message: [:author]]))
+      prepare(build(load: [message: Ash.Query.sort(Message, inserted_at: :desc)]))
       filter(expr(recipient_id == ^actor(:id) or message.author_id == ^actor(:id)))
     end
 
     create :create do
       argument :recipient, :uuid do
-        allow_nil? false
+        allow_nil?(false)
       end
 
       argument :message_text, :string do
-        default ""
-        allow_nil? false
+        default("")
+        allow_nil?(false)
       end
 
       change(fn changeset, %{actor: actor} ->
@@ -54,7 +55,7 @@ defmodule Digsync.Accounts.PrivateMessage do
         )
       end)
 
-      change manage_relationship(:recipient, type: :append_and_remove)
+      change(manage_relationship(:recipient, type: :append_and_remove))
     end
   end
 
