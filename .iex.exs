@@ -52,38 +52,8 @@ defmodule Console do
 end
 
 defmodule D do
-  def get_user(first_name) do
-    User
-    |> Ash.Query.for_read(:by_first, %{first_name: first_name})
-    |> Accounts.read_one!()
-  end
-
-  def groups() do
-    Group
-    |> Ash.Query.for_read(:read)
-    |> Accounts.read!()
-  end
-
-  def group_ids() do
-    groups() |> Enum.map(&[&1.id, &1.name])
-  end
-
-  def group_request() do
-    GroupRequest |> Accounts.read!(actor: Ash.get_actor())
-  end
-
-  def group_request(actor) do
-    group = Group |> Accounts.read_one!()
-
-    GroupRequest
-    |> Ash.Query.for_read(:read, %{group: group.id}, actor: actor)
-    |> Accounts.read!()
-  end
-
-  def create_griffins_request(requester, group) do
-    GroupRequest
-    |> Ash.Changeset.for_create(:create, %{group: group}, actor: requester)
-    |> Accounts.create!()
+  def group() do
+    Group |> Ash.Query.filter(name == "The Griffins") |> Accounts.read_one!() |> Map.get(:id)
   end
 end
 

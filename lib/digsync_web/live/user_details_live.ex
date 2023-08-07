@@ -9,11 +9,6 @@ defmodule DigsyncWeb.UserDetailsLive do
     {:ok, assign(socket, user: sanitize_user(user))}
   end
 
-  def handle_params(params, uri, socket) do
-    IO.inspect(params, label: "params")
-    {:noreply, socket}
-  end
-
   @display_fields [
     :address,
     :age,

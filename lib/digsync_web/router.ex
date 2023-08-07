@@ -29,10 +29,11 @@ defmodule DigsyncWeb.Router do
   scope "/", DigsyncWeb do
     pipe_through(:browser)
 
-    ash_authentication_live_session :users do
+    ash_authentication_live_session :users, on_mount: DigsyncWeb.LiveAuth do
       live("/users", UsersLive)
       live("/users/:user_id", UserDetailsLive)
       live("/create-message/:user_id", PrivateMessageLive)
+      live("/message-inbox", MessageInboxLive)
       live("/groups", GroupsLive)
       live("/groups/:group_id", GroupDetailsLive)
       live("/create-group/:user_id", CreateGroupLive)
