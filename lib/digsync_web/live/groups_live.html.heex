@@ -13,7 +13,9 @@
       height="50"
     />
 
-    <h1 class="text-3xl font-bold text-blue-600"><%= "#{elem(g, 0).name}" %></h1>
+    <h1 class="text-3xl font-bold text-blue-600">
+      <%= "#{elem(g, 0).name}" %>
+    </h1>
     <h2 class="text-3xl font-bold text-blue-600">
       <%= "#{elem(g, 1).first_name} #{elem(g, 1).first_name}" %>
     </h2>
@@ -23,10 +25,11 @@
       <% end %>
     </ul>
     <!-- Add the "View User" button with phx-click -->
+    <%= group_id = elem(g, 0).id %>
     <button
       class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2"
-      phx-click="view_user"
-      phx-value-user_id="{group.id}"
+      phx-click="view_group"
+      phx-value-group_id={group_id}
     >
       View Group
     </button>

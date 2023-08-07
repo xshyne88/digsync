@@ -3,12 +3,20 @@ defmodule DigsyncWeb.GroupsLive do
   alias Digsync.Accounts.Group
   alias Digsync.Accounts
   alias Digsync.Accounts.Users
+  alias DigsyncWeb.Router.Helpers, as: Routes
+  alias DigsyncWeb.GroupDetailsLive
+
 
   def mount(_params, _session, socket) do
     # pass in groups + creator
     groups = fetch_groups()
     socket = assign(socket, groups_to_creators: get_map_groups_to_creators())
     {:ok, socket}
+  end
+
+  def handle_event("view_group", %{"group_id" => group_id}, socket) do
+    socket = push_navigate(socket, to: Routes.live_path(socket, GroupDetailsLive, group_id))
+    {:noreply, socket}
   end
 
   @display_fields [
