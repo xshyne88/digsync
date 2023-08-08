@@ -26,14 +26,14 @@ defmodule Digsync.Accounts.GroupMembership do
               :string,
               fn gm, ctx -> gm.member.email end do
       load(member: [:email])
-      description "normalize email to see who they are"
+      description("normalize email to see who they are")
     end
 
     calculate :group_name,
               :string,
               fn gm, ctx -> gm.group.name end do
       load(group: [:name])
-      description "normalize group name"
+      description("normalize group name")
     end
   end
 
@@ -42,20 +42,20 @@ defmodule Digsync.Accounts.GroupMembership do
 
     read :read do
       argument :group, :uuid do
-        allow_nil? false
+        allow_nil?(false)
       end
 
-      description "only admins and group members can see other group members"
+      description("only admins and group members can see other group members")
       primary?(true)
-      prepare build(load: [:member_email, :group_name])
+      prepare(build(load: [:member_email, :group_name]))
     end
 
     read :my_membership do
       argument :group, :uuid do
-        allow_nil? false
+        allow_nil?(false)
       end
 
-      get? true
+      get?(true)
       filter(expr(^actor(:id) == member_id and group_id == ^arg(:group)))
     end
 
@@ -64,11 +64,11 @@ defmodule Digsync.Accounts.GroupMembership do
     end
 
     create :group_created do
-      description """
+      description("""
       this action is used from the groups resource
       when it is created the creator of the group is
       automagically set as an admin
-      """
+      """)
 
       argument :group, :uuid do
         allow_nil?(false)
@@ -81,7 +81,7 @@ defmodule Digsync.Accounts.GroupMembership do
 
     create :seed_create do
       argument :group, :uuid do
-        allow_nil? false
+        allow_nil?(false)
       end
 
       change(manage_relationship(:group, type: :append_and_remove))
@@ -89,7 +89,7 @@ defmodule Digsync.Accounts.GroupMembership do
     end
 
     create :create do
-      description "lookup group request and destroy it before creating group membership"
+      description("lookup group request and destroy it before creating group membership")
       primary?(true)
 
       argument :group_request, :uuid do
@@ -118,25 +118,27 @@ defmodule Digsync.Accounts.GroupMembership do
   end
 
   policies do
-    policy action_type(:create) do
+    policy action(:create) do
       authorize_if(CanAccessGroup)
+      # authorize_if(always())
     end
 
     policy action(:read) do
-      authorize_if(CanAccessGroup)
+      # authorize_if(CanAccessGroup)
+      authorize_if(always())
     end
 
     policy action(:my_membership) do
-      authorize_if always()
+      authorize_if(always())
     end
 
     policy action(:my_memberships) do
-      authorize_if always()
+      authorize_if(always())
     end
 
     policy action(:destroy) do
       # TODO: verify gm exists actor can destroy
-      authorize_if always()
+      authorize_if(always())
     end
   end
 

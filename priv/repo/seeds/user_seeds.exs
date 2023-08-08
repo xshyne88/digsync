@@ -14,9 +14,9 @@ defmodule UserSeed do
     data = FamilyGuy.data()
 
     family_guy_users =
-    FamilyGuy.names()
-    |> Enum.map(&build_user(data[&1], []))
-    |> Enum.map(&log_user/1)
+      FamilyGuy.names()
+      |> Enum.map(&build_user(data[&1], []))
+      |> Enum.map(&log_user/1)
 
     peter =
       User
@@ -35,23 +35,22 @@ defmodule UserSeed do
         %{name: "The Griffins", description: "Quahog's finest"},
         actor: peter
       )
-      |> Accounts.create!()
+      |> Accounts.create!(authorize: false)
 
     developer_users()
 
     GroupRequest
     |> Ash.Changeset.for_create(:create, %{group: griffins.id}, actor: stewie)
-    |> Accounts.create!()
+    |> Accounts.create(authorize?: false)
 
     family_guy_users
-    |> Enum.filter(& &1.id != peter.id)
+    |> Enum.filter(&(&1.id != peter.id))
     |> Enum.map(fn
       fg ->
-      GroupMembership
-      |> Ash.Changeset.for_create(:seed_create, %{group: griffins.id}, actor: fg)
-      |> Accounts.create!()
+        GroupMembership
+        |> Ash.Changeset.for_create(:seed_create, %{group: griffins.id}, actor: fg)
+        |> Accounts.create!(authorize?: false)
     end)
-
   end
 
   def developer_users do

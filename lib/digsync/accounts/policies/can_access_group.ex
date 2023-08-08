@@ -24,11 +24,6 @@ defmodule Digsync.Accounts.Policies.CanAccessGroup do
         action: %{name: :destroy},
         changeset: _changeset
       }) do
-    # IO.inspect(changeset)
-    # changeset
-    # |> get_group()
-    # |> find_membership(actor)
-    # |> is_group_member?(find_admin?: false)
     true
   end
 
