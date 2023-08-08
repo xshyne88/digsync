@@ -11,6 +11,12 @@ defmodule Digsync.Accounts.PrivateMessage do
     repo(Digsync.Repo)
   end
 
+  aggregates do
+    first :inbox, :message, :id do
+      sort([:inserted_at])
+    end
+  end
+
   actions do
     defaults([:update, :destroy])
 
