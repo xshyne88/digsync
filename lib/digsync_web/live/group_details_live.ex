@@ -4,7 +4,6 @@ defmodule DigsyncWeb.GroupDetailsLive do
   alias Digsync.Accounts.Groups
 
   def mount(%{"group_id" => group_id}, _session, socket) do
-    IO.puts("group id is #{group_id}")
     {:ok, group} = Groups.get(group_id)
     {:ok, assign(socket, group: clean_group(group))}
   end

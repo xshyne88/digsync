@@ -4,7 +4,6 @@ defmodule DigsyncWeb.PrivateMessageLive do
   def mount(%{"user_id" => user_id}, _session, socket) do
     current_user = socket.assigns.current_user
     form = generate_form(current_user)
-    IO.inspect(current_user)
     {:ok, assign(socket, actor: current_user, user_id: user_id, form: form)}
   end
 

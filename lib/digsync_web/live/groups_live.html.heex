@@ -27,7 +27,7 @@
 <!-- Rest of the template -->
 <p>This is a live page displaying group details.</p>
 <div>
-  <%= for g <- @groups_to_creators do %>
+  <%= for {group, creator} <- @groups_to_creators do %>
   <div class="user-card bg-blue-200 p-4 my-4 relative">
     <!-- Add relative positioning class -->
     <!-- Add absolute positioning classes for the avatar -->
@@ -39,23 +39,20 @@
       height="50"
     />
 
-    <h1 class="text-3xl font-bold text-blue-600">
-      <%= "#{elem(g, 0).name}" %>
-    </h1>
+    <h1 class="text-3xl font-bold text-blue-600"><%= "#{group.name}" %></h1>
     <h2 class="text-3xl font-bold text-blue-600">
-      <%= "#{elem(g, 1).first_name} #{elem(g, 1).first_name}" %>
+      <%= "#{creator.first_name} #{creator.last_name}" %>
     </h2>
     <ul>
-      <%= for {key, value} <- Map.to_list(elem(g, 0)) do %>
+      <%= for {key, value} <- Map.to_list(group) do %>
       <li><b><%= key %></b>: <%= value %></li>
       <% end %>
     </ul>
     <!-- Add the "View User" button with phx-click -->
-    <%= group_id = elem(g, 0).id %>
     <button
       class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2"
       phx-click="view_group"
-      phx-value-group_id="{group_id}"
+      phx-value-group_id={group.id}
     >
       View Group
     </button>

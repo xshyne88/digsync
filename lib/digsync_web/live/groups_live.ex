@@ -6,6 +6,7 @@ defmodule DigsyncWeb.GroupsLive do
   alias DigsyncWeb.Router.Helpers, as: Routes
   alias DigsyncWeb.GroupDetailsLive
   alias DigsyncWeb.CreateGroupLive
+  require Ash.Query
 
   def mount(_params, _session, socket) do
     # pass in groups + creator
@@ -50,6 +51,8 @@ defmodule DigsyncWeb.GroupsLive do
 
   def get_map_groups_to_creators() do
     groups = fetch_groups()
-    Enum.map(groups, fn group -> {group, elem(Users.get(group[:creator_id]), 1)} end)
+    Enum.map(groups, fn group ->
+      Accounts.load(group, :creator) |> Accounts.read!()
+    end)
   end
 end
