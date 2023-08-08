@@ -60,7 +60,7 @@ defmodule Digsync.Accounts.Group do
     defaults([:read, :update, :destroy])
 
     read :with_members do
-      prepare build(load: :group_memberships)
+      prepare(build(load: :group_memberships))
     end
 
     create :create do
@@ -68,7 +68,7 @@ defmodule Digsync.Accounts.Group do
         Ash.Changeset.after_action(changeset, fn changeset, group ->
           Digsync.Accounts.GroupMembership
           |> Ash.Changeset.for_create(:group_created, %{group: group.id}, actor: actor)
-          |> Digsync.Accounts.create()
+          |> Digsync.Accounts.create(authorize?: false)
           |> case do
             {:ok, _} ->
               {:ok, group}

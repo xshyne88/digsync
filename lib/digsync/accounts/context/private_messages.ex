@@ -15,4 +15,10 @@ defmodule Digsync.Accounts.PrivateMessages do
     |> Ash.Changeset.for_create(:create, params, actor: actor)
     |> Accounts.create()
   end
+
+  def most_recent(actor) do
+    PrivateMessage
+    |> Ash.Query.load(:message)
+    |> Ash.Query.sort()
+  end
 end
