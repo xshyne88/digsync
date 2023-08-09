@@ -27,7 +27,7 @@
 <!-- Rest of the template -->
 <p>This is a live page displaying group details.</p>
 <div>
-  <%= for {group, creator} <- @groups_to_creators do %>
+  <%= for group <- @groups do %>
   <div class="user-card bg-blue-200 p-4 my-4 relative">
     <!-- Add relative positioning class -->
     <!-- Add absolute positioning classes for the avatar -->
@@ -41,7 +41,7 @@
 
     <h1 class="text-3xl font-bold text-blue-600"><%= "#{group.name}" %></h1>
     <h2 class="text-3xl font-bold text-blue-600">
-      <%= "#{creator.first_name} #{creator.last_name}" %>
+      <%= "#{group.creator_first_name} #{group.creator_last_name}" %>
     </h2>
     <ul>
       <%= for {key, value} <- Map.to_list(group) do %>
