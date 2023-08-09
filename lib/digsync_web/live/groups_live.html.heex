@@ -1,0 +1,61 @@
+<!-- Add the header section -->
+<div class="flex justify-between items-center px-4 py-2 bg-gray-200">
+  <h1 class="text-2xl font-bold">Groups Live Page</h1>
+  <!-- Add the "Create Group" button with the plus sign icon -->
+  <button
+    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center"
+    phx-click="create_group"
+  >
+    <svg
+      class="w-4 h-4 mr-2"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+      ></path>
+    </svg>
+    Create Group
+  </button>
+</div>
+
+<!-- Rest of the template -->
+<p>This is a live page displaying group details.</p>
+<div>
+  <%= for group <- @groups do %>
+  <div class="user-card bg-blue-200 p-4 my-4 relative">
+    <!-- Add relative positioning class -->
+    <!-- Add absolute positioning classes for the avatar -->
+    <img
+      src="https://freepngimg.com/thumb/family_guy/26213-9-family-guy-photos.png"
+      alt="Avatar"
+      class="absolute top-2 right-2"
+      width="50"
+      height="50"
+    />
+
+    <h1 class="text-3xl font-bold text-blue-600"><%= "#{group.name}" %></h1>
+    <h2 class="text-3xl font-bold text-blue-600">
+      <%= "#{group.creator_first_name} #{group.creator_last_name}" %>
+    </h2>
+    <ul>
+      <%= for {key, value} <- Map.to_list(group) do %>
+      <li><b><%= key %></b>: <%= value %></li>
+      <% end %>
+    </ul>
+    <!-- Add the "View User" button with phx-click -->
+    <button
+      class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2"
+      phx-click="view_group"
+      phx-value-group_id={group.id}
+    >
+      View Group
+    </button>
+  </div>
+  <% end %>
+</div>

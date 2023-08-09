@@ -1,0 +1,7 @@
+<h1>Group Details Live Page</h1>
+<p>This is a live page displaying group details.</p>
+<ul>
+    <%= for {key, value} <- Map.to_list(@group) do %>
+    <li><b><%= key %></b>: <%= value %></li>
+    <% end %>
+  </ul>
