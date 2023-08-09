@@ -1,6 +1,5 @@
 defmodule DigsyncWeb.CreateGroupLive do
   use DigsyncWeb, :live_view
-  alias Digsync.Accounts.Group
   alias Digsync.Accounts
 
   def mount(_params, _session, socket) do
