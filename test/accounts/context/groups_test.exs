@@ -3,13 +3,12 @@ defmodule Digsync.Accounts.GroupsTest do
 
   import Digsync.Factory
 
-  alias Digsync.Accounts.Group
   alias Digsync.Accounts.Groups
 
   describe "get_by_id/3" do
     test "returns a group by id" do
       actor = build_user()
-      group = build_group(actor)
+      group = build_group(%{}, actor: actor)
 
       result = Groups.get_by_id(group.id, actor)
 
@@ -18,7 +17,7 @@ defmodule Digsync.Accounts.GroupsTest do
 
     test "loads relationships when fetching by id" do
       actor = build_user()
-      group = build_group(actor)
+      group = build_group(%{}, actor: actor)
 
       result = Groups.get_by_id(group.id, actor, [:creator])
 
@@ -30,8 +29,8 @@ defmodule Digsync.Accounts.GroupsTest do
   describe "all_groups/3" do
     test "fetches all groups" do
       actor = build_user()
-      group1 = build_group(actor)
-      group2 = build_group(actor)
+      group1 = build_group(%{}, actor: actor)
+      group2 = build_group(%{}, actor: actor)
 
       {:ok, result} = Groups.all_groups(actor)
 
@@ -44,8 +43,8 @@ defmodule Digsync.Accounts.GroupsTest do
     test "fetches all groups and their relationships" do
       actor = build_user()
       actor2 = build_user()
-      build_group(actor)
-      build_group(actor2)
+      build_group(%{}, actor: actor)
+      build_group(%{}, actor: actor2)
 
       {:ok, result} = Groups.all_groups(actor, [:creator])
 
@@ -54,15 +53,5 @@ defmodule Digsync.Accounts.GroupsTest do
       assert actor.email in emails
       assert actor2.email in emails
     end
-  end
-
-  defp build_group(actor) do
-    Group
-    |> Ash.Changeset.for_create(
-      :create,
-      %{name: Faker.Company.bullshit(), description: Faker.Company.bullshit()},
-      actor: actor
-    )
-    |> Accounts.create!()
   end
 end

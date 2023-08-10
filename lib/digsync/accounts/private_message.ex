@@ -3,6 +3,8 @@ defmodule Digsync.Accounts.PrivateMessage do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshGraphql.Resource]
 
+  alias __MODULE__
+
   postgres do
     table("private_messages")
     repo(Digsync.Repo)
@@ -13,6 +15,32 @@ defmodule Digsync.Accounts.PrivateMessage do
 
     read :read do
       primary?(true)
+
+      # prepare(build(sort: [inserted_at: :asc]))
+      # prepare(build(distinct: [:author_id]))
+      filter(expr(recipient_id == ^actor(:id) or author_id == ^actor(:id)))
+    end
+
+    read :preview do
+      prepare(build(sort: [inserted_at: :asc]))
+
+      argument :who, :uuid do
+        allow_nil? false
+      end
+
+      # modify_query fn ash, ecto ->
+      #   actor_id = Ash.Query.get_argument(ash, :who)
+
+      #   require Ecto.Query
+      #   import Ecto.Query
+
+      #   query =
+      #     from p in PrivateMessages,
+      #       where: p.recipient_id == ^recipient_id or p.author_id == ^author_id,
+      #       group_by: [p.author_id, p.recipient_id],
+
+      #       {:ok, query}
+      # end
 
       filter(expr(recipient_id == ^actor(:id) or author_id == ^actor(:id)))
     end

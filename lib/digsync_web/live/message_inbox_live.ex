@@ -22,13 +22,12 @@ defmodule DigsyncWeb.MessageInboxLive do
       <div>
         <%= for private_message <- @messages do %>
           <.private_message_container
-          author={private_message.message.author}
-          sent_at={private_message.message.inserted_at}
-          actor={@actor}
+            author={private_message.author}
+            sent_at={private_message.inserted_at}
+            actor={@actor}
           >
-          <%= private_message.message.text %>
+            <%= private_message.text %>
           </.private_message_container>
-
         <% end %>
       </div>
     </div>
@@ -41,6 +40,10 @@ defmodule DigsyncWeb.MessageInboxLive do
     PrivateMessage
     # TODO: Figure out why I have to use set_actor in query to load
     |> Ash.Query.set_actor(actor: actor)
+    # |> Ash.Query.distinct_sort(inserted_at: :desc)
+    |> Ash.Query.load(:author)
+    # |> Ash.Query.distinct(:author_id)
+    # |> Ash.Query.for_read(:preview, %{who: actor.id})
     |> Ash.Query.for_read(:read)
     |> Accounts.read()
     |> case do
