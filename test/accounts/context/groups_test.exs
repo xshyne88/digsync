@@ -1,7 +1,7 @@
 defmodule Digsync.Accounts.GroupsTest do
   use Digsync.DataCase, async: true
 
-  import Digsync.Fixtures.User
+  import Digsync.Factory
 
   alias Digsync.Accounts.Group
   alias Digsync.Accounts.Groups

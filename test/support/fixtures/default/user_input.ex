@@ -1,4 +1,4 @@
-defmodule Digsync.Fixtures.User.Helpers do
+defmodule Digsync.Fixtures.Default.UserInput do
   import Faker.Util
 
   def default_user_input(input \\ %{}) do

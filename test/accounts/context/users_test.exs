@@ -1,7 +1,7 @@
 defmodule Digsync.Accounts.UsersTest do
   use Digsync.DataCase
 
-  import Digsync.Fixtures.User
+  import Digsync.Factory
 
   alias Digsync.Accounts.User
   alias Digsync.Accounts.Users

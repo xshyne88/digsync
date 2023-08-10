@@ -6,7 +6,7 @@ defmodule UserSeed do
   alias Digsync.Accounts.GroupRequest
   alias Digsync.FamilyGuy
 
-  import Digsync.Fixtures.User, only: [build_user: 2]
+  import Digsync.Factory, only: [build_user: 2]
 
   require Ash.Query
 
