@@ -22,9 +22,9 @@ defmodule Digsync.Repo.Migrations.InitialSetup do
       add :instagram_link, :text
       add :linkedin_link, :text
       add :github_link, :text
-      add :gender, :text, default: "male"
       add :age, :bigint
       add :bio, :text
+      add :gender, :text, default: "male"
       add :skill_level, :text
       add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
       add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
@@ -44,48 +44,34 @@ defmodule Digsync.Repo.Migrations.InitialSetup do
 
     create table(:private_messages, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
-      add :message_id, :uuid, null: false
-      add :recipient_id, :uuid, null: false
-    end
-
-    create table(:messages, primary_key: false) do
-      add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
       add :text, :text
+      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+
+      add :recipient_id,
+          references(:users,
+            column: :id,
+            name: "private_messages_recipient_id_fkey",
+            type: :uuid,
+            prefix: "public"
+          ),
+          null: false
 
       add :author_id,
           references(:users,
             column: :id,
-            name: "messages_author_id_fkey",
+            name: "private_messages_author_id_fkey",
             type: :uuid,
             prefix: "public"
           ),
           null: false
     end
 
-    create unique_index(:messages, [:id], name: "messages_unique_message_id_index")
-
-    alter table(:private_messages) do
-      modify :message_id,
-             references(:messages,
-               column: :id,
-               name: "private_messages_message_id_fkey",
-               type: :uuid,
-               prefix: "public"
-             )
-
-      modify :recipient_id,
-             references(:users,
-               column: :id,
-               name: "private_messages_recipient_id_fkey",
-               type: :uuid,
-               prefix: "public"
-             )
-    end
-
     create table(:groups, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
       add :name, :text, null: false
       add :description, :text, null: false
+      add :invite_only?, :boolean, null: false, default: false
       add :locaton, :text
       add :preferred_location, :text
       add :type, :text, default: "social"
@@ -106,9 +92,54 @@ defmodule Digsync.Repo.Migrations.InitialSetup do
 
     create unique_index(:groups, [:name], name: "groups_unique_group_name_index")
 
+    create table(:group_requests, primary_key: false) do
+      add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
+      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add :deleted_at, :utc_datetime_usec, default: fragment("now()")
+
+      add :group_id,
+          references(:groups,
+            column: :id,
+            name: "group_requests_group_id_fkey",
+            type: :uuid,
+            prefix: "public"
+          ),
+          null: false
+
+      add :requester_id,
+          references(:users,
+            column: :id,
+            name: "group_requests_requester_id_fkey",
+            type: :uuid,
+            prefix: "public"
+          ),
+          null: false
+    end
+
+    create unique_index(:group_requests, [:group_id, :requester_id],
+             name: "group_requests_unique_group_request_index"
+           )
+
+    create table(:group_messages, primary_key: false) do
+      add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
+      add :text, :text
+      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+
+      add :group_id,
+          references(:groups,
+            column: :id,
+            name: "group_messages_group_id_fkey",
+            type: :uuid,
+            prefix: "public"
+          ),
+          null: false
+    end
+
     create table(:group_memberships, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
-      add :group_type, :text
+      add :group_type, :text, default: "member"
 
       add :group_id,
           references(:groups,
@@ -251,6 +282,20 @@ defmodule Digsync.Repo.Migrations.InitialSetup do
 
     drop table(:group_memberships)
 
+    drop constraint(:group_messages, "group_messages_group_id_fkey")
+
+    drop table(:group_messages)
+
+    drop_if_exists unique_index(:group_requests, [:group_id, :requester_id],
+                     name: "group_requests_unique_group_request_index"
+                   )
+
+    drop constraint(:group_requests, "group_requests_group_id_fkey")
+
+    drop constraint(:group_requests, "group_requests_requester_id_fkey")
+
+    drop table(:group_requests)
+
     drop_if_exists unique_index(:groups, [:name], name: "groups_unique_group_name_index")
 
     drop_if_exists unique_index(:groups, [:id], name: "groups_unique_group_id_index")
@@ -259,20 +304,9 @@ defmodule Digsync.Repo.Migrations.InitialSetup do
 
     drop table(:groups)
 
-    drop constraint(:private_messages, "private_messages_message_id_fkey")
-
     drop constraint(:private_messages, "private_messages_recipient_id_fkey")
 
-    alter table(:private_messages) do
-      modify :recipient_id, :uuid
-      modify :message_id, :uuid
-    end
-
-    drop_if_exists unique_index(:messages, [:id], name: "messages_unique_message_id_index")
-
-    drop constraint(:messages, "messages_author_id_fkey")
-
-    drop table(:messages)
+    drop constraint(:private_messages, "private_messages_author_id_fkey")
 
     drop table(:private_messages)
 

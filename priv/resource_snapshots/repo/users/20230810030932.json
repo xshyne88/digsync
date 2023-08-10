@@ -132,16 +132,6 @@
     },
     {
       "allow_nil?": true,
-      "default": "\"male\"",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "gender",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -158,6 +148,16 @@
       "references": null,
       "size": null,
       "source": "bio",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "\"male\"",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "gender",
       "type": "text"
     },
     {
@@ -196,7 +196,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "8565AC3A2AACDBBA66C28437B5C32E51136700355B71D4FA514A42F61D5FD373",
+  "hash": "E457D9E887D390050F7903ED10F4659235C3D1326A576FBD8C91ED314A89DCD8",
   "identities": [
     {
       "base_filter": null,

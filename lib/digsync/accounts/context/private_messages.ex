@@ -5,9 +5,9 @@ defmodule Digsync.Accounts.PrivateMessages do
 
   @spec create(String.t(), String.t(), User.t()) ::
           {:error, any} | {:ok, struct} | {:ok, struct, [Ash.Notifier.Notification.t()]}
-  def create(recipient_id, message_text, actor) do
+  def create(recipient_id, text, actor) do
     params = %{
-      message_text: message_text,
+      text: text,
       recipient: recipient_id
     }
 

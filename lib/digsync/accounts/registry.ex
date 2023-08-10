@@ -10,7 +10,6 @@ defmodule Digsync.Accounts.Registry do
     entry Digsync.Accounts.GroupMessage
     entry Digsync.Accounts.GroupMembership
     entry Digsync.Accounts.GroupRequest
-    entry Digsync.Accounts.Message
     entry Digsync.Accounts.PrivateMessage
   end
 end

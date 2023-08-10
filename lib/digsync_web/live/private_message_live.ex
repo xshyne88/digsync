@@ -22,7 +22,7 @@ defmodule DigsyncWeb.PrivateMessageLive do
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               label="Text"
-              field={@form[:message_text]}
+              field={@form[:text]}
             />
           </div>
           <.input type="hidden" value={@user_id} field={@form[:recipient]} />

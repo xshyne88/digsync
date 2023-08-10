@@ -3,18 +3,9 @@ defmodule Digsync.Accounts.PrivateMessage do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshGraphql.Resource]
 
-  alias Digsync.Accounts.Message
-  alias Digsync.Accounts.Messages
-
   postgres do
     table("private_messages")
     repo(Digsync.Repo)
-  end
-
-  aggregates do
-    first :inbox, :message, :id do
-      sort([:inserted_at])
-    end
   end
 
   actions do
@@ -23,54 +14,35 @@ defmodule Digsync.Accounts.PrivateMessage do
     read :read do
       primary?(true)
 
-      prepare(build(load: [message: [:author]]))
-      prepare(build(load: [message: Ash.Query.sort(Message, inserted_at: :desc)]))
-      filter(expr(recipient_id == ^actor(:id) or message.author_id == ^actor(:id)))
+      filter(expr(recipient_id == ^actor(:id) or author_id == ^actor(:id)))
     end
 
     create :create do
+      primary?(true)
+      accept([:text, :inserted_at])
+
       argument :recipient, :uuid do
         allow_nil?(false)
       end
 
-      argument :message_text, :string do
-        default("")
-        allow_nil?(false)
-      end
-
-      change(fn changeset, %{actor: actor} ->
-        Ash.Changeset.before_action(
-          changeset,
-          fn changeset ->
-            text = Ash.Changeset.get_argument(changeset, :message_text)
-
-            %{}
-            |> Map.put(:text, text)
-            |> Messages.create(actor: actor)
-            |> case do
-              {:ok, message} ->
-                Ash.Changeset.manage_relationship(changeset, :message, message.id,
-                  type: :append_and_remove
-                )
-
-              error ->
-                error
-            end
-          end,
-          prepend?: true
-        )
-      end)
-
+      change(relate_actor(:author))
       change(manage_relationship(:recipient, type: :append_and_remove))
     end
   end
 
   attributes do
     uuid_primary_key(:id)
+
+    attribute :text, :string do
+      constraints(allow_empty?: false)
+    end
+
+    create_timestamp(:inserted_at, private?: false, allow_nil?: false)
+    create_timestamp(:updated_at, private?: false, allow_nil?: false)
   end
 
   relationships do
-    belongs_to(:message, Digsync.Accounts.Message, allow_nil?: false)
     belongs_to(:recipient, Digsync.Accounts.User, allow_nil?: false)
+    belongs_to(:author, Digsync.Accounts.User, allow_nil?: false)
   end
 end
