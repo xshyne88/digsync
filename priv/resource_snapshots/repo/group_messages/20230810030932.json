@@ -11,6 +11,16 @@
       "type": "uuid"
     },
     {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "text",
+      "type": "text"
+    },
+    {
       "allow_nil?": false,
       "default": "fragment(\"now()\")",
       "generated?": false,
@@ -44,31 +54,6 @@
           "global": null,
           "strategy": null
         },
-        "name": "group_messages_message_id_fkey",
-        "on_delete": null,
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "messages"
-      },
-      "size": null,
-      "source": "message_id",
-      "type": "uuid"
-    },
-    {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": {
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
         "name": "group_messages_group_id_fkey",
         "on_delete": null,
         "on_update": null,
@@ -86,7 +71,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "931E3280DB2136062457C769E68D7FE0778C2D250884D079BE3CE90A6E1B9ECD",
+  "hash": "5C9959062AF3BE834863DDDE502332085EFA75BD68A929B30194F765A2374E91",
   "identities": [],
   "multitenancy": {
     "attribute": null,

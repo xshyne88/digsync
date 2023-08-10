@@ -4,7 +4,6 @@ defmodule DigsyncWeb.UsersLive do
   alias Digsync.Accounts.Users
   alias DigsyncWeb.UserDetailsLive
 
-
   alias DigsyncWeb.PrivateMessageLive
   alias DigsyncWeb.Router.Helpers, as: Routes
 
@@ -24,6 +23,7 @@ defmodule DigsyncWeb.UsersLive do
     socket = push_navigate(socket, to: Routes.live_path(socket, UserDetailsLive, user_id))
     {:noreply, socket}
   end
+
   def handle_event("send_private_message", %{"user_id" => user_id}, socket) do
     path = Routes.live_path(socket, PrivateMessageLive, user_id)
     {:noreply, push_navigate(socket, to: path)}
@@ -66,7 +66,7 @@ defmodule DigsyncWeb.UsersLive do
     :last_name,
     :linkedin_link,
     :phone_number,
-    :skill_level,
+    :skill_level
   ]
 
   defp sanitize_users(nil), do: nil

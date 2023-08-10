@@ -35,7 +35,7 @@ defmodule UserSeed do
         %{name: "The Griffins", description: "Quahog's finest"},
         actor: peter
       )
-      |> Accounts.create!(authorize: false)
+      |> Accounts.create!(authorize?: false)
 
     developer_users()
 

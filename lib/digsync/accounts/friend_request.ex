@@ -10,7 +10,7 @@ defmodule Digsync.Accounts.FriendRequest do
 
   resource do
     description("Requests are soft deleted to preserve the record")
-    base_filter(is_nil: :deleted_at)
+    # base_filter(is_nil: :deleted_at)
   end
 
   attributes do
