@@ -21,11 +21,16 @@ defmodule DigsyncWeb.GroupsLive do
     {:noreply, socket}
   end
 
-
   defp sanitize_groups(groups) do
     # Create a map of
     Enum.map(groups, fn group ->
-      %{creator_first_name: group.creator.first_name, creator_last_name: group.creator.last_name, id: group.id, name: group.name} end)
+      %{
+        creator_first_name: group.creator.first_name,
+        creator_last_name: group.creator.last_name,
+        id: group.id,
+        name: group.name
+      }
+    end)
   end
 
   defp fetch_groups(current_user) do

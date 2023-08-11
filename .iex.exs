@@ -3,7 +3,6 @@ alias Digsync.Planning.Event
 alias Digsync.GeoCensus.Client
 alias Digsync.Accounts.User
 alias Digsync.Accounts.Group
-alias Digsync.Accounts.Messages
 alias Digsync.Accounts.PrivateMessage
 alias Digsync.Accounts.GroupMembership
 alias Digsync.Accounts.GroupRequest
