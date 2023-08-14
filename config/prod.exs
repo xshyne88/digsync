@@ -7,6 +7,14 @@ import Config
 # before starting your production server.
 config :digsync, DigsyncWeb.Endpoint, cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :digsync, :phoenix_sass,
+  # this is the default
+  pattern: "sass/**/*.s[ac]ss",
+  # this is the default
+  output_dir: "static/css",
+  # this is the default (compressed)
+  output_style: 3
+
 # Configures Swoosh API Client
 config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: Digsync.Finch
 
