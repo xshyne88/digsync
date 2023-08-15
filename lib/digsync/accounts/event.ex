@@ -1,4 +1,4 @@
-defmodule Digsync.Planning.Event do
+defmodule Digsync.Accounts.Event do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshGraphql.Resource]

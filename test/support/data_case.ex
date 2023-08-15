@@ -20,7 +20,6 @@ defmodule Digsync.DataCase do
     quote do
       # apis
       alias Digsync.Accounts
-      alias Digsync.Planning
 
       # repo
       alias Digsync.Repo

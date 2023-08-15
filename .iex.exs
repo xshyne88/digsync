@@ -1,5 +1,4 @@
 alias Digsync.Geo.Helpers
-alias Digsync.Planning.Event
 alias Digsync.GeoCensus.Client
 alias Digsync.Accounts.User
 alias Digsync.Accounts.Group

@@ -1,6 +1,6 @@
 defmodule DigsyncWeb.CreateEventLive do
   use DigsyncWeb, :live_view
-  alias Digsync.Planning.Event
+  alias Digsync.Accounts.Event
 
   def mount(_params, _session, socket) do
     current_user = socket.assigns.current_user
