@@ -78,7 +78,7 @@ config :phoenix, :json_library, Jason
 config :digsync, Digsync.Endpoint, adapter: Bandit.PhoenixAdapter
 
 config :digsync,
-  ash_apis: [Digsync.Accounts, Digsync.Planning]
+  ash_apis: [Digsync.Accounts]
 
 # configure ash for relationships
 config :ash, :use_all_identities_in_manage_relationship?, false
