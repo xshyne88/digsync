@@ -20,14 +20,8 @@
             field={@form[:start_at]}
           />
         </div>
-        <div class="mb-4">
-          <.input
-            type="hidden" 
-            field={@form[:end_at]}
-          />
-        </div>
-  
-        <%= live_component DigsyncWeb.Live.Components.DatePickerComponent, id: "date_picker", selected_date: @selected_date, calendar_open: @calendar_open %>
+        <h1>Start Date</h1>
+        <%= live_component DigsyncWeb.Live.Components.DatePickerComponent, id: "start_date_picker", selected_date: @selected_date, calendar_open: @calendar_open %>
               
 
         <.button class="bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ">

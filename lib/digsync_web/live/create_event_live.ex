@@ -18,7 +18,6 @@ defmodule DigsyncWeb.CreateEventLive do
 
   def handle_info({:selected_date, date}, socket) do
     socket = assign(socket, selected_date: date, calendar_open: true)
-
     {:noreply, socket}
   end
 
@@ -34,15 +33,14 @@ defmodule DigsyncWeb.CreateEventLive do
   end
 
   def handle_event("submit", %{"form" => params}, socket) do
-
     params = Map.put(params, "start_at", socket.assigns.selected_date)
-    params = Map.put(params, "end_at", socket.assigns.selected_date)
-    # Logger.debug(params)
+
     case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
       {:ok, _message} ->
         {:noreply, put_flash(socket, :info, "Created Group!")}
 
       {:error, form} ->
+        Logger.error("error on form submission")
         {:noreply, assign(socket, form: form)}
     end
   end
