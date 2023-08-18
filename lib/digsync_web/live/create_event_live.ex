@@ -34,6 +34,7 @@ defmodule DigsyncWeb.CreateEventLive do
 
   def handle_event("submit", %{"form" => params}, socket) do
     params = Map.put(params, "start_at", socket.assigns.selected_date)
+    params = Map.put(params, "end_at", socket.assigns.selected_date)
 
     case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
       {:ok, _message} ->
