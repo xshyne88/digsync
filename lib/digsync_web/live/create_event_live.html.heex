@@ -14,11 +14,23 @@
             field={@form[:description]}
           />
         </div>
+        <div class="mb-4">
+          <.input
+            type="hidden" 
+            field={@form[:start_at]}
+          />
+        </div>
+        <div class="mb-4">
+          <.input
+            type="hidden" 
+            field={@form[:end_at]}
+          />
+        </div>
   
-        <%= live_component @socket, DigsyncWeb.Live.Components.DatePickerComponent, id: "date_picker", selected_date: @selected_date, calendar_open: @calendar_open %>
+        <%= live_component DigsyncWeb.Live.Components.DatePickerComponent, id: "date_picker", selected_date: @selected_date, calendar_open: @calendar_open %>
               
 
-        <.button class="bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        <.button class="bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ">
           Create Event
         </.button>
 

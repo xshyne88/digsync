@@ -1,6 +1,7 @@
 defmodule DigsyncWeb.CreateEventLive do
   use DigsyncWeb, :live_view
   alias Digsync.Accounts.Event
+  require Logger
 
   def mount(_params, _session, socket) do
     current_user = socket.assigns.current_user
@@ -15,7 +16,6 @@ defmodule DigsyncWeb.CreateEventLive do
      )}
   end
 
-  @impl true
   def handle_info({:selected_date, date}, socket) do
     socket = assign(socket, selected_date: date, calendar_open: true)
 
@@ -34,6 +34,10 @@ defmodule DigsyncWeb.CreateEventLive do
   end
 
   def handle_event("submit", %{"form" => params}, socket) do
+
+    params = Map.put(params, "start_at", socket.assigns.selected_date)
+    params = Map.put(params, "end_at", socket.assigns.selected_date)
+    # Logger.debug(params)
     case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
       {:ok, _message} ->
         {:noreply, put_flash(socket, :info, "Created Group!")}
