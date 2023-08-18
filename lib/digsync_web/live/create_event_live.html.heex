@@ -1,0 +1,37 @@
+<div class="w-full max-w-sm mx-auto">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <.form
+        class="w-full max-w-sm mx-auto p-4 bg-white rounded-lg shadow-md"
+        for={@form}
+        phx-change="validate"
+        phx-submit="submit"
+      >
+        <div class="mb-4">
+          <.input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            label="Event Name"
+            field={@form[:description]}
+          />
+        </div>
+        <div class="mb-4">
+          <.input
+            type="hidden" 
+            field={@form[:start_at]}
+          />
+        </div>
+        <h1>Start Date</h1>
+        <%= live_component DigsyncWeb.Live.Components.DatePickerComponent, id: "start_date_picker", selected_date: @selected_date, calendar_open: @calendar_open %>
+              
+
+        <.button class="bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ">
+          Create Event
+        </.button>
+
+      </.form>
+    </div>
+</div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/themes/airbnb.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>

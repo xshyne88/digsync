@@ -22,6 +22,7 @@ config :digsync, DigsyncWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
   code_reloader: true,
+  reloadable_compilers: [:gettext, :phoenix, :elixir, :phoenix_sass],
   debug_errors: true,
   secret_key_base: "w/l4pur50uyA8xuc1/zaQnVh9HQO4wvsbfpOHBBE8z5iMoxkeZEpXWVlQy0h54dv",
   watchers: [
@@ -56,6 +57,7 @@ config :digsync, DigsyncWeb.Endpoint,
 config :digsync, DigsyncWeb.Endpoint,
   live_reload: [
     patterns: [
+      ~r"priv/sass/.*(sass|scss)$",
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/digsync_web/(controllers|live|components)/.*(ex|heex)$"

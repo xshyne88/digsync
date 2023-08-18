@@ -37,6 +37,7 @@ defmodule DigsyncWeb.Router do
       live("/groups", GroupsLive)
       live("/groups/:group_id", GroupDetailsLive)
       live("/create-group", CreateGroupLive)
+      live("/create-event", CreateEventLive)
     end
 
     get("/", PageController, :home)

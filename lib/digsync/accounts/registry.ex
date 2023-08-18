@@ -12,5 +12,6 @@ defmodule Digsync.Accounts.Registry do
     entry Digsync.Accounts.GroupRequest
     entry Digsync.Accounts.PrivateMessage
     entry Digsync.Accounts.Location
+    entry Digsync.Accounts.Event
   end
 end
