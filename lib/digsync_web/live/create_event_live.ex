@@ -1,6 +1,7 @@
 defmodule DigsyncWeb.CreateEventLive do
   use DigsyncWeb, :live_view
   alias Digsync.Accounts.Event
+  alias Digsync.GeoCensus.Client
   require Logger
 
   def mount(_params, _session, socket) do
@@ -29,20 +30,38 @@ defmodule DigsyncWeb.CreateEventLive do
 
   def handle_event("validate", %{"form" => params}, socket) do
     form = AshPhoenix.Form.validate(socket.assigns.form, params)
-    {:noreply, assign(socket, form: form)}
+    address = Map.get(params, "address")
+
+    Client.fetch_by_online_address(address)
+    |> case do
+      # do something
+      {:ok, coords} ->
+        IO.inspect("hey we found coords: #{inspect(coords)}")
+        {:noreply, assign(socket, form: form)}
+
+      {:error, _} ->
+        Logger.error("invalid address")
+        {:error, assign(socket, form: form)}
+    end
   end
 
   def handle_event("submit", %{"form" => params}, socket) do
-    params = Map.put(params, "start_at", socket.assigns.selected_date)
-    params = Map.put(params, "end_at", socket.assigns.selected_date)
 
-    case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
+    case AshPhoenix.Form.submit(socket.assigns.form, params: params, actor: socket.assigns.actor) do
       {:ok, _message} ->
-        {:noreply, put_flash(socket, :info, "Created Group!")}
+        {:noreply, put_flash(socket, :info, "Created Event!")}
 
       {:error, form} ->
         Logger.error("error on form submission")
+        Logger.error(AshPhoenix.Form.errors(form, format: :raw))
         {:noreply, assign(socket, form: form)}
     end
+  end
+
+  def format_date(date) do
+    date
+    |> Timex.parse!("%Y-%m-%d", :strftime)
+
+    # |> to_string()
   end
 end

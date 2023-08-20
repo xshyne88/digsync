@@ -47,6 +47,8 @@ defmodule Digsync.Accounts.Event do
       validate is_point(:geo_point)
 
       change set_attribute(:geo_point, arg(:geo_point))
+
+      change relate_actor(:creator)
     end
   end
 
